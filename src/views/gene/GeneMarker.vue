@@ -12,7 +12,7 @@ export default {
     };
   },
   components: {
-    CIframe: () => import("./components/Ciframe.vue"),
+    // CIframe: () => import("./components/Ciframe.vue"),
   },
 };
 </script>

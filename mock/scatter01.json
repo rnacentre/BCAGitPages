@@ -1,0 +1,47 @@
+[
+{
+        "x": -10.41,
+        "y": 4.898,
+        "sample": "human_M1C_1",
+        "species": "human",
+        "cluster": "8",
+        "celltype": "Inh_SST",
+        "dataset": "hm_M1C"
+    },
+    {
+        "x": -8.243,
+        "y": -9.915,
+        "sample": "human_M1C_1",
+        "species": "human",
+        "cluster": "11",
+        "celltype": "Inh_VIP",
+        "dataset": "hm_M1C"
+    },
+    {
+        "x": 15.031,
+        "y": 1.542,
+        "sample": "human_M1C_1",
+        "species": "human",
+        "cluster": "19",
+        "celltype": "Exc_FEZF2",
+        "dataset": "hm_M1C"
+    },
+    {
+        "x": -8.178,
+        "y": -6.246,
+        "sample": "human_M1C_1",
+        "species": "human",
+        "cluster": "11",
+        "celltype": "Inh_VIP",
+        "dataset": "hm_M1C"
+    },
+    {
+        "x": 5.272,
+        "y": 12.566,
+        "sample": "human_M1C_1",
+        "species": "human",
+        "cluster": "23",
+        "celltype": "Exc_THEMIS",
+        "dataset": "hm_M1C"
+    }
+]
