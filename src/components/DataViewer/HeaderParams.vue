@@ -47,8 +47,8 @@ export default {
   data(){
     return{
       form: {
-        atlas: 'Tumour',
-        region: 'Cerebral cortex',
+        atlas: 'Fetal',
+        region: 'Pons',
       },
       altasOptionsData:[
         {
@@ -86,7 +86,7 @@ export default {
     }
   },
   mounted(){
-    this.changeAtlas('Tumour')
+    this.changeAtlas('Fetal')
   }
 }
 </script>

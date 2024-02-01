@@ -194,7 +194,7 @@ export const routes = [
         name: "cellSorting",
         component: () => import("@/views/cell-sorting"),
         meta: {
-          title: "Cell Sorting",
+          title: "Exploration",
           keepAlive: true,
         },
       },
