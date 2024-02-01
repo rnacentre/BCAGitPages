@@ -1,0 +1,52 @@
+[
+  {
+    "cell_type": "Fibroblast",
+    "count": 6001,
+    "dataset": "Fetal_Head"
+  },
+  {
+    "cell_type": "Placodes",
+    "count": 299,
+    "dataset": "Fetal_Head"
+  },
+  {
+    "cell_type": "Neural crest",
+    "count": 293,
+    "dataset": "Fetal_Head"
+  },
+  {
+    "cell_type": "Radial glia",
+    "count": 58,
+    "dataset": "Fetal_Head"
+  },
+  {
+    "cell_type": "Erythrocyte",
+    "count": 48,
+    "dataset": "Fetal_Head"
+  },
+  {
+    "cell_type": "Immune",
+    "count": 31,
+    "dataset": "Fetal_Head"
+  },
+  {
+    "cell_type": "Vascular",
+    "count": 30,
+    "dataset": "Fetal_Head"
+  },
+  {
+    "cell_type": "Neuroblast",
+    "count": 28,
+    "dataset": "Fetal_Head"
+  },
+  {
+    "cell_type": "Neuron",
+    "count": 8,
+    "dataset": "Fetal_Head"
+  },
+  {
+    "cell_type": "Neuronal IPC",
+    "count": 5,
+    "dataset": "Fetal_Head"
+  }
+]

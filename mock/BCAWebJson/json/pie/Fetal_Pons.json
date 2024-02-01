@@ -1,0 +1,62 @@
+[
+  {
+    "cell_type": "Neuron",
+    "count": 29636,
+    "dataset": "Fetal_Pons"
+  },
+  {
+    "cell_type": "Neuroblast",
+    "count": 17475,
+    "dataset": "Fetal_Pons"
+  },
+  {
+    "cell_type": "Radial glia",
+    "count": 15734,
+    "dataset": "Fetal_Pons"
+  },
+  {
+    "cell_type": "Glioblast",
+    "count": 14740,
+    "dataset": "Fetal_Pons"
+  },
+  {
+    "cell_type": "Neuronal IPC",
+    "count": 4811,
+    "dataset": "Fetal_Pons"
+  },
+  {
+    "cell_type": "Oligo",
+    "count": 4568,
+    "dataset": "Fetal_Pons"
+  },
+  {
+    "cell_type": "Neural crest",
+    "count": 2463,
+    "dataset": "Fetal_Pons"
+  },
+  {
+    "cell_type": "Placodes",
+    "count": 2406,
+    "dataset": "Fetal_Pons"
+  },
+  {
+    "cell_type": "Fibroblast",
+    "count": 1284,
+    "dataset": "Fetal_Pons"
+  },
+  {
+    "cell_type": "Vascular",
+    "count": 1236,
+    "dataset": "Fetal_Pons"
+  },
+  {
+    "cell_type": "Immune",
+    "count": 896,
+    "dataset": "Fetal_Pons"
+  },
+  {
+    "cell_type": "Erythrocyte",
+    "count": 803,
+    "dataset": "Fetal_Pons"
+  }
+]
