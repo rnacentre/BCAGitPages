@@ -2,12 +2,13 @@ import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
-
+import "./style/global.css"
 import ElementUI from "element-ui";
+import _ from 'lodash'
 import "element-ui/lib/theme-chalk/index.css";
 Vue.use(ElementUI, { size: "medium", zIndex: 3000 });
 Vue.config.productionTip = false;
-
+Vue.prototype._ = _;
 import Components from "./components";
 
 import * as echarts from "echarts";
