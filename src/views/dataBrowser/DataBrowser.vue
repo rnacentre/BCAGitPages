@@ -60,7 +60,7 @@
   </div>
 </template>
 <script>
-import Plotly from  'plotly.js-basic-dist'
+import Plotly from 'plotly.js-dist-min'
 import HeaderParams from "@/components/DataViewer/HeaderParams";
 import { chartColor } from "../../../mock/chartcolor"
 import color_keys from "../../../mock/TumourForTest/color_keys.json"

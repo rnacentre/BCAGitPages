@@ -46,7 +46,7 @@
 
 <script>
 import HeaderParams from "@/components/DataViewer/HeaderParams";
-import Plotly from "plotly.js-basic-dist";
+import Plotly from 'plotly.js-dist-min'
 import { celltyleColorData } from "../../../mock/chartcolor"
 export default {
   name: "Exploration",
@@ -64,6 +64,17 @@ export default {
     }
   },
   methods: {
+    async getGeneBoxplot(jsonData){
+      let data = [] //存储箱线图的数据
+      for (let i = 0; i < jsonData.length; i++) {
+        data.push({
+          'type': 'box',
+          'name':jsonData[i]['gene'],
+          'y':jsonData[i]['exps'].split(','),
+        })
+      }
+      Plotly.newPlot('boxChartContainer', data);
+    },
     switchUmapGene(geneVal){
 
     },
@@ -228,11 +239,25 @@ export default {
       let jsonDataModule = await import(`../../../mock/BCAWebJson/json/pie/${params['atlas']}_${params['region'].trim()}.json`);
       let jsonData = jsonDataModule.default; // 提取默认导出的 JSON 数据
       await this.dealChartData(jsonData)
+      //获取gene 表达量的数据
+      // let path = `../../../mock/BCAWebJson/json/gene/${params['atlas']}/${params['region'].trim()}`
+      // console.log(path,"path")
+      // let jsonDataModule2 = await import(`../../../mock/BCAWebJson/json/gene/${params['atlas']}/${params['region'].trim()}/A1BG.json`);
+      // let expJsonData = jsonDataModule2.default; // 提取默认导出的表达量 JSON 数据
+      // console.log(expJsonData,"expJsonData")
+    },
+    //获取gene 表达量的数据
+    importAll(requireContext){
+      return requireContext.keys().map(requireContext);
     }
   },
   async mounted(){
     await this.getLoadData(this.datasetParams)
 
+    const jsonDataArray = this.importAll(
+      require.context('../../../mock/BCAWebJson/json/gene/Fetal/Pons', false, /\.json$/)
+    );
+    await this.getGeneBoxplot(jsonDataArray)
   }
 }
 </script>
