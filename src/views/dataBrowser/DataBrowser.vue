@@ -13,9 +13,9 @@
           <span class="params-text">Color By</span>
           <el-select
             class="select-space"
-            v-model="form.color"
+            v-model="colorBy"
             placeholder="please select color"
-            @change="switchUmapType(form.color)"
+            @change="switchUmapType(colorBy)"
           >
             <el-option
               v-for="(item) in colorByOptions"
@@ -32,7 +32,12 @@
 
         <div class="params-container">
           <span class="params-text">Features</span>
-          <el-select class="select-space" v-model="form.atlas" placeholder="please select gene">
+          <el-select
+            class="select-space"
+            v-model="geneFeatures"
+            placeholder="please select gene"
+            @change="switchUmapGene(geneFeatures)"
+          >
 
             <el-option
               v-for="(item) in geneOptions"
@@ -44,7 +49,7 @@
           </el-select>
           <div class="right-scatter" >
 
-            <div id="scatterChartRefRight"></div>
+            <div ref="scatterChartRefRight" id="scatterChartRefRight"></div>
           </div>
         </div>
       </div>
@@ -66,62 +71,55 @@ export default {
   },
   data() {
     return {
-      form: {
-        color: '',
-        region: '',
-      },
+      colorBy:'cell_type',//存储当前选中的color by的参数
+      geneFeatures:'A1BG',//存储当前选中的features参数
       colorByOptions:[],
-      geneOptions:[
-        { "label": 'ZNF277',
-          "value": 'ZNF277'
-        },
-        { "label": 'BRCA2',
-          "value": 'BRCA2'
-        },
-        { "label": 'KCTD9',
-          "value": 'KCTD9'
-        },
-        { "label": 'IGFBP6',
-          "value": 'IGFBP6'
-        },
-      ],
-      datasetParams:{
-        "atlas": "Tumour",
-        "region": "Cerebral cortex "
+      geneOptions:[],
+      datasetParams:{//存储页面初始默认展示的参数
+        "atlas": "Fetal",
+        "region": "Pons"//Tumour_Pons_umap
       },
     };
   },
   methods:{
+    async switchUmapGene(geneVal){
+      await this.getLoadData(this.datasetParams,this.colorBy,geneVal)
+    },
     async switchUmapType(chartType) {
-      let jsonDataModule = await import(`../../../mock/TumourForTest/${ this.datasetParams['atlas']}_${ this.datasetParams['region']}_umap.json`);
-      let jsonData = jsonDataModule.default; // 提取默认导出的 JSON 数据
-      const umapChartData = this.dealUmapData(jsonData, chartType, [])
-      this.drawUMAPChart(umapChartData, this.$refs.scatterChartRefLeft, "selectedGroupIndex", chartType)
+      await this.getLoadData(this.datasetParams,chartType)
     },
     submitParams(params){
       this.datasetParams = params
       this.$set(this,"colorByOptions",color_keys[params['atlas']])
-      this.getLoadData(params)
+
+      this.getLoadData(params,this.colorBy,this.geneFeatures)
     },
-    async getLoadData(params) {
-      let chartType = 'cell_type'
-      let jsonDataModule = await import(`../../../mock/TumourForTest/${params['atlas']}_${params['region']}_umap.json`);
-      let jsonData = jsonDataModule.default; // 提取默认导出的 JSON 数据
-      const umapChartData = this.dealUmapData(jsonData, chartType, [])
+    async getLoadData(params,chartType,geneVal) {
+      let jsonDataModule1 = await import(`../../../mock/BCAWebJson/json/${params['atlas']}_${params['region'].trim()}_umap.json`);
+      let xyJsonData = jsonDataModule1.default; // 提取默认导出的散点图 JSON 数据
+      const umapChartData = this.dealUmapData(xyJsonData, chartType, [])
+      //绘制左边第一个散点图
       this.drawUMAPChart(umapChartData, this.$refs.scatterChartRefLeft, "selectedGroupIndex", chartType)
-    },
-    async selectUmapGene(geneVal) {
-      if(!geneVal){
-        // geneVal = this.itemsGene[0]  //默认展示第一个基因的数据
+
+      //绘制右边表达量散点图
+      if(geneVal){
+        let jsonDataModule2 = await import(`../../../mock/BCAWebJson/json/gene/${params['atlas']}/${params['region'].trim()}/${geneVal}.json`);
+        let expJsonData = jsonDataModule2.default; // 提取默认导出的表达量 JSON 数据
+        let expsDataArr = expJsonData.exps.split(',').map(item=>Number(item))
+        await this.selectUmapGene(geneVal,xyJsonData,'cell_type',expsDataArr)
       }
 
-      let exp = [-2.295, 8.16, -2.401, 15.52, -2.172, 14.076, -1.677,]
-      // let expsDataArr = exp.split(',').map(item=>Number(item))
+      //获取gene下拉框的数据
+      let jsonDataModule3 = await import(`../../../mock/BCAWebJson/json/geneIndex/${params['atlas']}.json`);
+      let geneJsonData = jsonDataModule3.default// 提取默认导出的基因 JSON 数据
+      this.$set(this,"geneOptions",geneJsonData)
 
-      let num = '02'
-      let jsonDataModule = await import(`../../../mock/scatter${num}.json`);
-      let jsonData = jsonDataModule.default; // 提取默认导出的 JSON 数据
-      const geneUmapData = this.dealUmapData(jsonData, "celltype", exp)
+
+
+
+    },
+    async selectUmapGene(geneVal,xyJsonData,chartType,expsDataArr) {
+      const geneUmapData = this.dealUmapData(xyJsonData, "cell_type", expsDataArr)
       this.drawUMAPChart(geneUmapData, this.$refs.scatterChartRefRight, "selectedGeneGroupIndex", geneVal)
     },
     //画散点图
@@ -200,7 +198,7 @@ export default {
         if (chartData[item[groupName]]) {
           chartData[item[groupName]][0].push(item.x)//x轴
           chartData[item[groupName]][1].push(item.y)//y轴
-          if(groupName === "celltype" && expressions.length){
+          if(groupName === "cell_type" && expressions.length){
             //gene表达量
             chartData[item[groupName]][2].push(expressions[index])//表达量
           }
@@ -210,7 +208,7 @@ export default {
           chartData[item[groupName]] = [[item.x],[item.y],[firstExp]]
         }
       })
-      if(groupName === "celltype" && expressions.length){
+      if(groupName === "cell_type" && expressions.length){
         //gene表达量
         for(let groupName in chartData){
           chartData[groupName][2].unshift(_.mean(chartData[groupName][2]))
@@ -236,16 +234,8 @@ export default {
         diagramColorData[colorKey[i]] = chartColor[i]
       }
       for (let info in orderedChartData) {
-        //选择celltype的时候  必须在基因表达量的判断前面
-        if(this.selectType ===  "celltype" && groupName === "celltype" ){
-          marker = {
-            color: celltyleColorData[info],
-            size: 2,
-          }
-        }
         //选择gene的时候
-        if(expressions.length &&  groupName === "celltype"  ){
-          this.datasetCelltype.push(info)  //datasetCelltype 传走给gene between species页面用
+        if(expressions.length &&  groupName === "cell_type"){
           //gene表达量
           marker = {
             color: chartData[info][2],
@@ -253,21 +243,6 @@ export default {
             cmin:0,
             cmax,
             colorscale:"Reds"  //设置规定的颜色
-          }
-        }
-        //选择cluster的时候
-        if(groupName === "cluster"){
-          this.datasetCluter.push(info)  //datasetCluster 传走给gene between species页面用
-          marker = {
-            color: diagramColorData[info],
-            size: 2,
-          }
-        }
-        //先择species的时候
-        if(groupName === "species"){
-          marker = {
-            color: this.speciesColor[info],
-            size: 2,
           }
         }
         data.push({
@@ -290,97 +265,17 @@ export default {
       }
       return data;
     },
-    //画扇形图的逻辑
-    drawPieChart(){
-      const elements = document.getElementsByClassName('right-scatter');
-      let data = [{
-        values: [19, 26, 55],
-        labels: ['Residential', 'Non-Residential', 'Utility'],
-        type: 'pie'
-      }];
-
-      let layout = {
-        // width: window.innerWidth,  // 初始宽度
-        width: elements[0].offsetWidth,  // 初始宽度
-        // height: window.innerHeight,  // 初始高度width: window.innerWidth,  // 初始宽度
-        height: elements[0].offsetHeight,  // 初始高度
-      };
-
-      Plotly.newPlot('scatterChartRefRight', data, layout);
-      window.addEventListener('resize', () => {
-        // 获取新的窗口大小
-        const newWidth = elements[0].offsetWidth;
-        const newHeight = elements[0].offsetHeight;
-
-        // 使用 relayout 方法重新布局图表
-        Plotly.relayout('scatterChartRefRight', {
-          width: newWidth,
-          height: newHeight
-        });
-      });
-    },
-    async loadData() {
-      let chartType = 'Sample'
-      let num = '02'
-      let jsonDataModule = await import(`../../../mock/scatter${num}.json`);
-      let jsonData = jsonDataModule.default; // 提取默认导出的 JSON 数据
-      const umapChartData = this.dealUmapData(jsonData, chartType, [])
-      this.drawUMAPChart(umapChartData, this.$refs.scatterChartRefLeft, "selectedGroupIndex", chartType)
-
-    }
   },
   mounted(){
-    // this.drawPieChart() //绘制扇形图
+
     //绘制散点图
-    this.getLoadData(this.datasetParams)
+    this.getLoadData(this.datasetParams,this.colorBy,this.geneFeatures)
     this.$set(this,"colorByOptions",color_keys[this.datasetParams['atlas']])
 
-    // let jsonData = import(`../../../mock/scatter01.json`)
-    // this.loadData()
-    //
-   //绘制含有表达量的散点图
-   //  this.selectUmapGene("ADARB2")
   }
 };
 </script>
 <style lang="scss">
-.tips{
-  background-color:rgb(247,248,250);
-  padding: 15px;
-}
 
-.select-space{
-  margin-left: 60px;
-}
-.submit-button{
-  width: 150px;
-}
-.scatter-container{
-  margin-top: 15px;
-  display: flex;
-  justify-content: space-around;
-  //background-color: lemonchiffon;
-}
-.scatter-container .params-container{
-  width: 49%
-}
-.scatter-container .params-container{
-  padding: 5px;
-  border-radius: 20px;
-  background-color: white;
-
-}
-.scatter-container .params-container .params-text{
-  font-size: 24px;
-  font-weight: bold;
-  margin-left: 20px;
-}
-.scatter-container .left-scatter,.right-scatter{
-  width:100%;
-  height:700px;
-}
-.scatter-container div:first-child{
-  margin-right: 20px;
-}
 
 </style>
