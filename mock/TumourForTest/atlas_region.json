@@ -129,6 +129,14 @@
     {
       "label": "all",
       "value": "all"
+    },
+    {
+      "label": "Pons",
+      "value": "Pons"
+    },
+    {
+      "label": "Head",
+      "value": "Head"
     }
   ]
 }
