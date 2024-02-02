@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import regionOptions from "../../../mock/TumourForTest/atlas_region.json"
+import regionOptions from "../../../mock/BCAWebJson/json/atlas_region.json"
 export default {
   name: "HeaderParams",
   data(){
