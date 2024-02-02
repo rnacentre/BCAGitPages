@@ -1,60 +1,62 @@
 <template>
-  <div class="tips">
-    <HeaderParams
-      @submitParams="submitParams"
-    ></HeaderParams>
-<!--    绘制扇形图区域-->
-    <div class="canvas-container">
-      <div class="params-container">
-        <span class="params-text">Cell Proportion</span>
-        <div class="left-scatter canvas-h">
-          <div id="pieChartContainer" ref="pieChartContainer"></div>
+  <div class="custom-body-container">
+    <div class="wrap">
+      <HeaderParams
+        @submitParams="submitParams"
+      ></HeaderParams>
+      <!--    绘制扇形图区域-->
+      <div class="canvas-container">
+        <div class="params-container">
+          <span class="params-text">Cell Proportion</span>
+          <div class="left-scatter canvas-h">
+            <div id="pieChartContainer" ref="pieChartContainer"></div>
+          </div>
+        </div>
+
+        <div class="params-container">
+          <span class="params-text"></span>
+          <div class="right-scatter canvas-h">
+            <div id="barChartContainer" ref="barChartContainer"></div>
+          </div>
         </div>
       </div>
-
-      <div class="params-container">
-        <span class="params-text"></span>
-        <div class="right-scatter canvas-h">
-          <div id="barChartContainer" ref="barChartContainer"></div>
-        </div>
-      </div>
-    </div>
-<!--    绘制箱线图-->
-    <div class="canvas-container">
-      <div class="box-container" style="width:100%;margin-bottom: 10px">
-        <div style="margin-bottom: 10px">
-          <span class="params-text">Features</span>
-          <el-select
-            ref="geneSelect"
-            :loading="loading"
-            class="select-space"
-            clearable
-            filterable
-            v-model="geneFeatures"
-            placeholder="please select gene"
-            :filter-method="filterValue"
-            @change="switchUmapGene(geneFeatures)"
-          >
-
-            <el-option
-              v-for="(item) in sliceGeneOptions"
-              :label="item['label']"
-              :value="item['value']"
-              :key="item['value']"
+      <!--    绘制箱线图-->
+      <div class="canvas-container">
+        <div class="box-container" style="width:100%;margin-bottom: 10px">
+          <div style="margin-bottom: 10px">
+            <span class="params-text">Features</span>
+            <el-select
+              ref="geneSelect"
+              :loading="loading"
+              class="select-space"
+              clearable
+              filterable
+              v-model="geneFeatures"
+              placeholder="please select gene"
+              :filter-method="filterValue"
+              @change="switchUmapGene(geneFeatures)"
             >
-            </el-option>
-          </el-select>
+
+              <el-option
+                v-for="(item) in sliceGeneOptions"
+                :label="item['label']"
+                :value="item['value']"
+                :key="item['value']"
+              >
+              </el-option>
+            </el-select>
+          </div>
+
+          <div class="box-chart canvas-h">
+            <div id="boxChartContainer" ref="expBoxPlot"></div>
+          </div>
         </div>
 
-        <div class="box-chart canvas-h">
-          <div id="boxChartContainer" ref="expBoxPlot"></div>
-        </div>
       </div>
-
-    </div>
-<!--    绘制热图-->
-    <div class="canvas-container">
-      <div class="heat-map-container canvas-h" ref="heatmapChartRef"></div>
+      <!--    绘制热图-->
+      <div class="canvas-container last-container">
+        <div class="heat-map-container canvas-h" ref="heatmapChartRef"></div>
+      </div>
     </div>
   </div>
 </template>
@@ -420,5 +422,8 @@ export default {
 }
 .canvas-h{
   height:600px;
+}
+.last-container{
+  margin-bottom: 15px
 }
 </style>
