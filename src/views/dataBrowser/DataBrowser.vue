@@ -14,6 +14,9 @@
           <el-select
             class="select-space"
             v-model="colorBy"
+            clearable
+            filterable
+            :filter-method="filterValue"
             placeholder="please select color"
             @change="switchUmapType(colorBy)"
           >
@@ -33,6 +36,8 @@
         <div class="params-container">
           <span class="params-text">Features</span>
           <el-select
+            ref="geneSelect"
+            :loading="loading"
             class="select-space"
             v-model="geneFeatures"
             placeholder="please select gene"
@@ -40,7 +45,7 @@
           >
 
             <el-option
-              v-for="(item) in geneOptions"
+              v-for="(item) in t"
               :label="item['label']"
               :value="item['value']"
               :key="item['value']"
@@ -63,7 +68,7 @@
 import Plotly from 'plotly.js-dist-min'
 import HeaderParams from "@/components/DataViewer/HeaderParams";
 import { chartColor } from "../../../mock/chartcolor"
-import color_keys from "../../../mock/TumourForTest/color_keys.json"
+import color_keys from "../../../mock/BCAWebJson/json/color_keys.json"
 export default {
   name: "dataBrowser",
   components:{
@@ -79,9 +84,48 @@ export default {
         "atlas": "Fetal",
         "region": "Pons"//Tumour_Pons_umap
       },
+      sliceGeneOptions:[],
+      loading: false,
+      noMore: false,
     };
   },
   methods:{
+    filterValue(query) {
+      if (query !== "") {
+        let filterOptions = this.geneOptions.filter((item) => {
+          // 这里是用的value选项筛选，默认是label
+          return item.value.toLowerCase().indexOf(query.toLowerCase()) > -1;
+        });
+        let options = filterOptions.slice(0,20)
+        this.$set(this,"sliceGeneOptions",options)
+      } else {
+        this.sliceGeneOptions = [];
+      }
+    },
+    async loadMore(){
+      if(this.loading) return
+      this.loading = true
+      let options = this.geneOptions.slice(this.sliceGeneOptions.length,this.sliceGeneOptions.length + 4)
+      this.sliceGeneOptions = this.sliceGeneOptions.concat(options)
+      this.timer = setTimeout(()=>{
+        this.loading = false
+      },500)
+
+      if(this.geneOptions.length === this.sliceGeneOptions.length){
+        this.$refs.geneSelect.$refs.scrollbar.$refs.wrap.removeEventListener('scroll',this.scolling())
+        this.noMore = true
+      }
+    },
+    scolling(){
+      let e = this.$refs.geneSelect.$refs.scrollbar.$refs.wrap
+      if(this.noMore) return
+      // 到底时触发 loadMore
+      let loadMore = e.scrollHeight -  e.scrollTop -5 < e.clientHeight
+
+      if(loadMore){
+        this.loadMore()
+      }
+    },
     async switchUmapGene(geneVal){
       await this.getLoadData(this.datasetParams,this.colorBy,geneVal)
     },
@@ -112,6 +156,7 @@ export default {
       //获取gene下拉框的数据
       let jsonDataModule3 = await import(`../../../mock/BCAWebJson/json/geneIndex/${params['atlas']}.json`);
       let geneJsonData = jsonDataModule3.default// 提取默认导出的基因 JSON 数据
+      this.sliceGeneOptions = geneJsonData.slice(0,20)
       this.$set(this,"geneOptions",geneJsonData)
 
 
@@ -267,7 +312,7 @@ export default {
     },
   },
   mounted(){
-
+    this.$refs.geneSelect.$refs.scrollbar.$refs.wrap.addEventListener('scroll',this.scolling)
     //绘制散点图
     this.getLoadData(this.datasetParams,this.colorBy,this.geneFeatures)
     this.$set(this,"colorByOptions",color_keys[this.datasetParams['atlas']])
