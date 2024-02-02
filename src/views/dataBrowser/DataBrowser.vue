@@ -1,10 +1,11 @@
 <template>
-  <div>
-    <div class="tips">
+  <div class="custom-body-container">
+    <div class="wrap" >
 <!--      &nbsp; &nbsp; &nbsp; <span class="strong">↓</span> You can choose to display cells from a specific region based on the REGION column below. (Or other categories of interest.)-->
 <!--     参数区域-->
      <HeaderParams
      @submitParams="submitParams"
+     :datasetParams="datasetParams"
      ></HeaderParams>
 <!--      绘制散点图区域-->
 
@@ -76,6 +77,10 @@ export default {
   },
   data() {
     return {
+      chartInfo: {//存储umap图例点击信息
+        selectedGroupIndex: -1,//不要改这个key
+        selectedGeneGroupIndex: -1,//不要改这个key
+      },
       colorBy:'cell_type',//存储当前选中的color by的参数
       geneFeatures:'A1BG',//存储当前选中的features参数
       colorByOptions:[],
@@ -88,6 +93,19 @@ export default {
       loading: false,
       noMore: false,
     };
+  },
+  watch:{
+    "$route":{
+      handler(val){
+      let { sample_type } = val['query']
+      if(sample_type){
+        this.datasetParams['region'] = sample_type
+        this.getLoadData(this.datasetParams,this.colorBy,this.geneFeatures)
+      }
+      },
+      immediate:true,
+      deep:true
+    }
   },
   methods:{
     filterValue(query) {
@@ -127,9 +145,11 @@ export default {
       }
     },
     async switchUmapGene(geneVal){
+      this.chartInfo.selectedGeneGroupIndex = -1
       await this.getLoadData(this.datasetParams,this.colorBy,geneVal)
     },
     async switchUmapType(chartType) {
+      this.chartInfo.selectedGroupIndex = -1
       await this.getLoadData(this.datasetParams,chartType)
     },
     submitParams(params){

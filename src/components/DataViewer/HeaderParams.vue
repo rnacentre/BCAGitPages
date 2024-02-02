@@ -44,6 +44,25 @@
 import regionOptions from "../../../mock/BCAWebJson/json/atlas_region.json"
 export default {
   name: "HeaderParams",
+  props:{
+    datasetParams:{
+      type:Object,
+      default: function (){
+        return {}
+      }
+    }
+  },
+  watch:{
+    datasetParams:{ //监听从dataviewer页面传来的参数
+      handler(value){
+        if(!_.isEmpty(value)){
+          this.$set(this,"form",value)
+        }
+      },
+      immediate:true,
+      deep:true
+    }
+  },
   data(){
     return{
       form: {
@@ -95,6 +114,7 @@ export default {
 .params-form{
   height: 130px;
   border-radius: 20px;
+  margin-top: 15px;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
