@@ -4,42 +4,57 @@
       @submitParams="submitParams"
     ></HeaderParams>
 <!--    绘制扇形图区域-->
-    <div class="scatter-container">
+    <div class="canvas-container">
       <div class="params-container">
         <span class="params-text">Cell Proportion</span>
-        <div class="left-scatter">
+        <div class="left-scatter canvas-h">
           <div id="pieChartContainer" ref="pieChartContainer"></div>
         </div>
       </div>
 
       <div class="params-container">
         <span class="params-text"></span>
-        <div class="right-scatter">
+        <div class="right-scatter canvas-h">
           <div id="barChartContainer" ref="barChartContainer"></div>
         </div>
       </div>
     </div>
 <!--    绘制箱线图-->
-    <div class="canvas-container" style="background-color: white;height: 700px;margin-top: 15px;border-radius: 20px;">
-      <div class="params-container">
-        <span class="params-text">Features</span>
-        <el-select
-          class="select-space"
-          v-model="geneFeatures"
-          placeholder="please select gene"
-          @change="switchUmapGene(geneFeatures)"
-        >
-
-          <el-option
-            v-for="(item) in geneOptions"
-            :label="item['label']"
-            :value="item['value']"
-            :key="item['value']"
+    <div class="canvas-container">
+      <div class="box-container" style="width:100%;margin-bottom: 10px">
+        <div style="margin-bottom: 10px">
+          <span class="params-text">Features</span>
+          <el-select
+            ref="geneSelect"
+            :loading="loading"
+            class="select-space"
+            clearable
+            filterable
+            v-model="geneFeatures"
+            placeholder="please select gene"
+            :filter-method="filterValue"
+            @change="switchUmapGene(geneFeatures)"
           >
-          </el-option>
-        </el-select>
+
+            <el-option
+              v-for="(item) in sliceGeneOptions"
+              :label="item['label']"
+              :value="item['value']"
+              :key="item['value']"
+            >
+            </el-option>
+          </el-select>
+        </div>
+
+        <div class="box-chart canvas-h">
+          <div id="boxChartContainer" ref="expBoxPlot"></div>
+        </div>
       </div>
-      <div id="boxChartContainer" ref="expBoxPlot"></div>
+
+    </div>
+<!--    绘制热图-->
+    <div class="canvas-container">
+      <div class="heat-map-container canvas-h" ref="heatmapChartRef"></div>
     </div>
   </div>
 </template>
@@ -48,6 +63,7 @@
 import HeaderParams from "@/components/DataViewer/HeaderParams";
 import Plotly from 'plotly.js-dist-min'
 import { celltyleColorData } from "../../../mock/chartcolor"
+import { heatmapData,textColor } from "../../../mock/heatmapData";
 export default {
   name: "Exploration",
   components: {
@@ -55,31 +71,137 @@ export default {
   },
   data() {
     return {
-      geneFeatures:'A1BG',//存储当前选中的features参数
+      // geneFeatures:'A1BG',//存储当前选中的features参数
+      geneFeatures:'GAPDH',//测试gene1:GAPDH 测试gene2:RPS19
       datasetParams:{//存储页面初始默认展示的参数
         "atlas": "Fetal",
         "region": "Pons"
       },
       geneOptions:[],
+      sliceGeneOptions:[],
+      filterOptions:[],
+      loading: false,
+      noMore: false,
     }
   },
   methods: {
-    async getGeneBoxplot(jsonData){
-      let data = [] //存储箱线图的数据
-      for (let i = 0; i < jsonData.length; i++) {
-        data.push({
-          'type': 'box',
-          'name':jsonData[i]['gene'],
-          'y':jsonData[i]['exps'].split(','),
-        })
+    filterValue(query) {
+      if (query !== "") {
+       let filterOptions = this.geneOptions.filter((item) => {
+          // 这里是用的value选项筛选，默认是label
+          return item.value.toLowerCase().indexOf(query.toLowerCase()) > -1;
+        });
+          let options = filterOptions.slice(0,20)
+          this.$set(this,"sliceGeneOptions",options)
+      } else {
+        this.sliceGeneOptions = [];
       }
-      Plotly.newPlot('boxChartContainer', data);
     },
-    switchUmapGene(geneVal){
+    async loadMore(){
+      if(this.loading) return
+      this.loading = true
+      let options = this.geneOptions.slice(this.sliceGeneOptions.length,this.sliceGeneOptions.length + 4)
+      this.sliceGeneOptions = this.sliceGeneOptions.concat(options)
+      this.timer = setTimeout(()=>{
+        this.loading = false
+      },500)
+
+      if(this.geneOptions.length === this.sliceGeneOptions.length){
+        this.$refs.geneSelect.$refs.scrollbar.$refs.wrap.removeEventListener('scroll',this.scolling())
+        this.noMore = true
+      }
+    },
+    scolling(){
+      let e = this.$refs.geneSelect.$refs.scrollbar.$refs.wrap
+      if(this.noMore) return
+      // 到底时触发 loadMore
+      let loadMore = e.scrollHeight -  e.scrollTop -5 < e.clientHeight
+
+      if(loadMore){
+        this.loadMore()
+      }
+    },
+    //画热图 drawHeatMapData
+    drawHeatMapData(heatmapData, textColor) {
+      let allLayout = {
+        title: 'human & mouse',
+          margin:{
+          l:130, //解决Y轴显示的值超出
+            b:115,
+        },
+        xaxis:{
+          tickmode: "array",
+            tickangle:-60,
+            zeroline:false,//不显示纵坐标轴
+            autotick:false, //是否绘制刻度线标签
+        },
+      }
+      //设置图片导出的参数
+      let  config = {
+        toImageButtonOptions: {
+          format: 'svg', // 设置图片导出格式
+          filename: 'image',//设置导出命名
+          scale: 1 // 导出图片放大比例 1为不缩放
+        }
+      };
+      let layout = _.cloneDeep(allLayout)
+      layout["xaxis"]["ticktext"] = textColor
+      layout["xaxis"]["tickvals"] = heatmapData[0]["x"]
+      Plotly.newPlot(this.$refs.heatmapChartRef, heatmapData,layout,config);
 
     },
+    //将数据按照celltype分组基因表达量
+    async groupCellType(cellTypeData,expsData){
+      let groupedData = expsData.reduce((result, value, index) => {
+        let type = cellTypeData[index];
+
+        // 初始化数组，如果不存在
+        if (!result[type]) {
+          result[type] = [];
+        }
+
+        // 将值添加到对应的分组中
+        result[type].push(value);
+
+        return result;
+      }, {});
+      //绘制箱线图
+      await this.getGeneBoxplot(groupedData)
+    },
+    async getGeneBoxplot(jsonData){
+      const elementsBox = document.getElementsByClassName('box-chart');
+      let data = [] //存储箱线图的数据
+      for (const groupedDataKey in jsonData) {
+        data.push({
+          'type': 'box',
+          'name':groupedDataKey,
+          'y':jsonData[groupedDataKey]
+        })
+      }
+      const layout = {
+        margin: {
+          b: 100,
+        },
+      };
+      Plotly.newPlot('boxChartContainer', data,layout);
+      window.addEventListener('resize', () => {
+        // 获取新的窗口大小
+        const newWidth = elementsBox[0].offsetWidth;
+        const newHeight = elementsBox[0].offsetHeight;
+
+        // 使用 relayout 方法重新布局图表
+        Plotly.relayout('boxChartContainer', {
+          width: newWidth,
+          height: newHeight
+        });
+      });
+    },
+    async switchUmapGene(geneVal){
+      await this.getLoadData(this.datasetParams,geneVal)
+    },
     async submitParams(params) {
-      await this.getLoadData(params)
+      this.$set(this,"datasetParams",params) //更新dataset的参数
+      await this.getLoadData(params,this.geneFeatures)
     },
 
     /**
@@ -194,12 +316,14 @@ export default {
         humanTrace = {
           x: nameValueArr,
           y: humanCountData,
-          name: 'human',
+          // name: 'human',
+          name:`${this.datasetParams['atlas']}_${this.datasetParams['region']}`,
           type: 'bar',
           // orientation:'h',
           width:0.6,
           marker: {   //控制人类色柱的颜色
-            color: '#62A3CB',
+            // color: '#62A3CB',
+            color:celltyleColorData
           }
         }
       }
@@ -212,7 +336,7 @@ export default {
           labels: nameValueArr,
           type: 'pie',
           title: {
-            text: 'Human',
+            text:`${this.datasetParams['atlas']}_${this.datasetParams['region']}`,
             font:{
               size:16,
             },
@@ -234,34 +358,67 @@ export default {
       await this.drawPieAndBarChart(pieChartData,speciesCountValues) //绘制扇形图
     },
     //动态获取json数据
-    async getLoadData(params) {
-      // let jsonDataModule = await import(`../../../mock/BCAWebJson/json/pie/Fetal_Pons.json`);
-      let jsonDataModule = await import(`../../../mock/BCAWebJson/json/pie/${params['atlas']}_${params['region'].trim()}.json`);
-      let jsonData = jsonDataModule.default; // 提取默认导出的 JSON 数据
+    async getLoadData(params,geneVal) {
+
+      let jsonDataModule1 = await import(`../../../mock/BCAWebJson/json/pie/${params['atlas']}_${params['region'].trim()}.json`);
+      let jsonData = jsonDataModule1.default; // 提取默认导出的 JSON 数据
       await this.dealChartData(jsonData)
-      //获取gene 表达量的数据
-      // let path = `../../../mock/BCAWebJson/json/gene/${params['atlas']}/${params['region'].trim()}`
-      // console.log(path,"path")
-      // let jsonDataModule2 = await import(`../../../mock/BCAWebJson/json/gene/${params['atlas']}/${params['region'].trim()}/A1BG.json`);
-      // let expJsonData = jsonDataModule2.default; // 提取默认导出的表达量 JSON 数据
-      // console.log(expJsonData,"expJsonData")
+
+     //组合箱线图数据
+      let jsonDataModule2 = await import(`../../../mock/BCAWebJson/json/${params['atlas']}_${params['region'].trim()}_umap.json`);
+      let xyJsonData = jsonDataModule2.default; // 提取默认导出的散点图 JSON 数据
+
+      if(geneVal){
+        let jsonDataModule2 =  await import(`../../../mock/BCAWebJson/json/gene/Fetal/Pons/${geneVal}.json`);
+        let jsonData2 = jsonDataModule2.default; // 提取默认导出的 JSON 数据
+        let cellType = []
+        for (let i = 0; i <xyJsonData.length ; i++) {
+          cellType.push(xyJsonData[i]['cell_type'])
+        }
+        let expData = jsonData2.exps.split(',')
+        await this.groupCellType(cellType,expData)
+
+      }
+
+      //获取gene下拉框的数据
+      let jsonDataModule3 = await import(`../../../mock/BCAWebJson/json/geneIndex/${params['atlas']}.json`);
+      let geneJsonData = jsonDataModule3.default// 提取默认导出的基因 JSON 数据
+      this.sliceGeneOptions = geneJsonData.slice(0,20)
+      this.$set(this,"geneOptions",geneJsonData)
     },
-    //获取gene 表达量的数据
-    importAll(requireContext){
-      return requireContext.keys().map(requireContext);
-    }
   },
   async mounted(){
-    await this.getLoadData(this.datasetParams)
+    this.drawHeatMapData(heatmapData,textColor)
+    await this.getLoadData(this.datasetParams,this.geneFeatures)
 
-    const jsonDataArray = this.importAll(
-      require.context('../../../mock/BCAWebJson/json/gene/Fetal/Pons', false, /\.json$/)
-    );
-    await this.getGeneBoxplot(jsonDataArray)
+    this.$refs.geneSelect.$refs.scrollbar.$refs.wrap.addEventListener('scroll',this.scolling)
+
   }
 }
 </script>
 
 <style scoped>
-
+.canvas-container{
+  margin-top: 15px;
+  border-radius: 20px;
+  padding: 5px;
+  display: flex;
+  justify-content: space-around;
+  background-color: white;
+}
+.canvas-container .params-container{
+  width: 49%
+}
+.canvas-container .left-scatter,.right-scatter{
+  width:100%;
+}
+.box-chart{
+  width:100%;
+}
+.heat-map-container{
+  width: 100%;
+}
+.canvas-h{
+  height:600px;
+}
 </style>
