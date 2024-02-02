@@ -45,7 +45,7 @@
           >
 
             <el-option
-              v-for="(item) in t"
+              v-for="(item) in sliceGeneOptions"
               :label="item['label']"
               :value="item['value']"
               :key="item['value']"
