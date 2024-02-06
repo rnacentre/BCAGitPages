@@ -18,7 +18,10 @@
           </ul>
         </div>
         <div class="mt10" align="center">
-          <el-image :src="`${NODE_ENV}/data/volcano/VolcanoBy${atlasMarkerBtn}/${params.atlas}_${params.region}_${params.cellType}.png`" alt="" style="width:58%">
+<!--          第一次是请求方式读取资源-->
+<!--          <el-image :src="`${NODE_ENV}/data/volcano/VolcanoBy${atlasMarkerBtn}/${params.atlas}_${params.region}_${params.cellType}.png`" alt="" style="width:58%">-->
+<!--         第二次是更换资源读取方式--读取项目中public目录下面的资源-->
+          <el-image :src="`/BCAGitPages/volcano/VolcanoBy${atlasMarkerBtn}/${params.atlas}_${params.region}_${params.cellType}.png`" alt="" style="width:58%">
             <template #error>
               <div class="image-slot">
                 <el-empty description="Not available in current version of Brain Cell Atals"></el-empty>
@@ -158,6 +161,7 @@
 </template>
 <script>
 import { postCSV } from "@/api/system.js";
+import Papa from 'papaparse';
 export default {
   name: "Markers",
   props: {
@@ -204,7 +208,9 @@ export default {
   methods: {
     downloadFile (type) {
       if (this.tableData.length < 1) return
-      const fsURl = `${this.NODE_ENV}/data/csv/markersBy${this.atlasMarkerBtn}/${this.params.atlas}_${this.params.region}_${this.params.cellType}_cell_type.${type}`
+      // const fsURl = `${this.NODE_ENV}/data/csv/markersBy${this.atlasMarkerBtn}/${this.params.atlas}_${this.params.region}_${this.params.cellType}_cell_type.${type}`
+      //更换下载的数据文件-->读取public下面的文件的数据
+      const fsURl = `/BCAGitPages/markersBy${this.atlasMarkerBtn}/${this.params.atlas}_${this.params.region}_${this.params.cellType}_cell_type.${type}`
       if (type === 'pdf') {
         fetch(fsURl).then(res => {
           res.blob().then(blob => {
@@ -225,6 +231,36 @@ export default {
       this.pageSize = item;
       this.fetchMarkers(this.params)
     },
+    async getTableData(params){
+      const csvFilePath = `/BCAGitPages/markersBy${this.atlasMarkerBtn}/${params.atlas}_${params.region}_${params.cellType}_cell_type.csv`
+      let jsonData
+      const csvContent = await fetch(csvFilePath)
+        .then(response => response.text())
+        .then(csvText => {
+          Papa.parse(csvText, {
+            header: true,
+            dynamicTyping: true,
+            skipEmptyLines: true,
+            complete: result => {
+              jsonData = result.data;
+            },
+            error: error => {
+              console.error('Error parsing CSV:', error.message);
+            },
+          });
+        })
+      //处理csv文件中数据的表头是空值的逻辑
+      let modifiedTable = jsonData.map(item => {
+        for (const itemKey in item) {
+          if (itemKey === '') {
+            item['C0'] = item[''];
+            delete item[''];
+          }
+        }
+        return item;
+      });
+      return modifiedTable
+    },
     async fetchMarkers (params) {
       if (params.atlas === 'Mouse') {
         this.tableData = []
@@ -238,26 +274,27 @@ export default {
       this.showMarker = true
       this.loading = true
       try {
-        const result = await postCSV({
-          fileName: `csv/markersBy${this.atlasMarkerBtn}/${params.atlas}_${params.region}_${params.cellType}_cell_type.csv`,
-          maxLength: this.pageSize
-        })
-        const tabelKeys = Object.keys(result)
-        let tableData = []
-        result.C0.forEach((item, index) => {
-          tableData.push(
-            tabelKeys.reduce((obj, key) => {
-              obj[key] = result[key][index];
-              return obj
-            }, {})
-          )
-        })
+        // const result = await postCSV({
+        //   fileName: `csv/markersBy${this.atlasMarkerBtn}/${params.atlas}_${params.region}_${params.cellType}_cell_type.csv`,
+        //   maxLength: this.pageSize
+        // })
+        // const tabelKeys = Object.keys(result)
+        // let tableData = []
+        // result.C0.forEach((item, index) => {
+        //   tableData.push(
+        //     tabelKeys.reduce((obj, key) => {
+        //       obj[key] = result[key][index];
+        //       return obj
+        //     }, {})
+        //   )
+        // })
+        let tableData = await this.getTableData(params)
         this.tableData = tableData
         this.frozenData = [...tableData]
-        this.tabelKeys = tabelKeys
-        tabelKeys.forEach(key => {
-          this.selectKeyArray[key] = [...(new Set(result[key]))]
-        })
+        // this.tabelKeys = tabelKeys
+        // tabelKeys.forEach(key => {
+        //   this.selectKeyArray[key] = [...(new Set(result[key]))]
+        // })
         this.loading = false
       } catch (error) {
         // this.$message.info(`No data found`);
