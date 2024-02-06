@@ -124,6 +124,7 @@
 </template>
 <script>
 import { postCSV } from "@/api/system.js";
+import Papa from 'papaparse';
 import { Loading } from 'element-ui';
 export default {
   data () {
@@ -151,6 +152,39 @@ export default {
   computed: {
   },
   methods: {
+    //更换文件数据获取方式
+    async getTableData(){
+      const csvFilePath = '/BCAGitPages/datasets_view.csv'
+      const csvContent = await fetch(csvFilePath)
+        .then(response => response.text())
+        .then(csvText => {
+          Papa.parse(csvText, {
+            header: true,
+            dynamicTyping: true,
+            skipEmptyLines: true,
+            complete: result => {
+              let jsonData = result.data;
+              for (let i = 0; i < jsonData.length; i++) {
+                this.tableData.push({
+                  Species:jsonData[i]['Species'],
+                  Atlas: jsonData[i]['Atlas'],
+                  Tissue:jsonData[i]['Tissue'],
+                  Status: jsonData[i]['Status'],
+                  Platform: jsonData[i]['Platform'],
+                  'Seq-type': jsonData[i]['Seq-type'],
+                  Year: jsonData[i]['Year'],
+                  Accession: jsonData[i]['Accession'],
+                  Link: jsonData[i]['Link']
+                })
+              }
+
+            },
+            error: error => {
+              console.error('Error parsing CSV:', error.message);
+            },
+          });
+        })
+    },
     toLink (link) {
       if (link)
         window.open(link)
@@ -242,10 +276,11 @@ export default {
 
     }
   },
-  mounted () {
-    this.fetchDetail()
+  async mounted () {
+    // await this.fetchDetail() //请求不通(500)先注释了
+    await this.getTableData() //更换文件数据获取方式(public文件下面的数据的)
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 .reference-table {
