@@ -153,7 +153,13 @@ export default {
       this.showImg = label;
     },
     linkTo (areaName) {
-      this.$router.push({ path: "/dataBrowser?sample_type=" + areaName });
+      this.$router.push({
+        path: "/dataBrowser",
+        query: {
+          "region": areaName,
+          "atlas": 'Adult' // Additional parameter
+        }
+      });
       // this.$router.push({ path: "/cellSorting?sample_type=" + areaName });
     },
     // 点击div外部事件

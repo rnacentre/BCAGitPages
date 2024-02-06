@@ -97,9 +97,10 @@ export default {
   watch:{
     "$route":{
       handler(val){
-      let { sample_type } = val['query']
-      if(sample_type){
-        this.datasetParams['region'] = sample_type
+      let { region,atlas } = val['query']
+      if(region){
+        this.datasetParams['region'] = region
+        this.datasetParams['atlas'] = atlas
         this.getLoadData(this.datasetParams,this.colorBy,this.geneFeatures)
       }
       },
@@ -215,8 +216,8 @@ export default {
           r:0,
         },
         hovermode: 'closest',//默认开启 Show closest data on hover
-        width: elements[0].offsetWidth,  // 初始宽度
-        height: elements[0].offsetHeight,  // 初始高度
+        width: elements[0]?.offsetWidth,  // 初始宽度
+        height: elements[0]?.offsetHeight,  // 初始高度
       };
       Plotly.newPlot(container, chartData,layout,config)
 
@@ -242,8 +243,8 @@ export default {
       })
       window.addEventListener('resize', () => {
         // 获取新的窗口大小
-        const newWidth = elements[0].offsetWidth;
-        const newHeight = elements[0].offsetHeight;
+        const newWidth = elements[0]?.offsetWidth;
+        const newHeight = elements[0]?.offsetHeight;
 
         // 使用 relayout 方法重新布局图表
         Plotly.relayout('scatterChartRefLeft', {
