@@ -30,7 +30,7 @@
 <!--          第一次是请求方式读取资源-->
 <!--          <el-image v-if="params.cellType!=''" :src="`${NODE_ENV}/data/volcano/CellTypeDEG/${params.atlas}_${params.cellType}.png`" alt="">-->
 <!--          第二次是更换资源读取方式&#45;&#45;读取项目中public目录下面的资源-->
-          <el-image v-if="params.cellType!=''" :src="`/BCAGitPages/volcano/CellTypeDEG/${params.atlas}_${params.cellType}.png`" alt="">
+          <el-image v-if="params.cellType!=''" :src="`/volcano/CellTypeDEG/${params.atlas}_${params.cellType}.png`" alt="">
             <template #error>
               <div class="image-slot">
                 <el-empty description="Not available in current version of Brain Cell Atals"></el-empty>

@@ -21,7 +21,7 @@
 <!--          第一次是请求方式读取资源-->
 <!--          <el-image :src="`${NODE_ENV}/data/volcano/VolcanoBy${atlasMarkerBtn}/${params.atlas}_${params.region}_${params.cellType}.png`" alt="" style="width:58%">-->
 <!--         第二次是更换资源读取方式--读取项目中public目录下面的资源-->
-          <el-image :src="`/BCAGitPages/volcano/VolcanoBy${atlasMarkerBtn}/${params.atlas}_${params.region}_${params.cellType}.png`" alt="" style="width:58%">
+          <el-image :src="`/volcano/VolcanoBy${atlasMarkerBtn}/${params.atlas}_${params.region}_${params.cellType}.png`" alt="" style="width:58%">
             <template #error>
               <div class="image-slot">
                 <el-empty description="Not available in current version of Brain Cell Atals"></el-empty>
@@ -210,7 +210,7 @@ export default {
       if (this.tableData.length < 1) return
       // const fsURl = `${this.NODE_ENV}/data/csv/markersBy${this.atlasMarkerBtn}/${this.params.atlas}_${this.params.region}_${this.params.cellType}_cell_type.${type}`
       //更换下载的数据文件-->读取public下面的文件的数据
-      const fsURl = `/BCAGitPages/markersBy${this.atlasMarkerBtn}/${this.params.atlas}_${this.params.region}_${this.params.cellType}_cell_type.${type}`
+      const fsURl = `/markersBy${this.atlasMarkerBtn}/${this.params.atlas}_${this.params.region}_${this.params.cellType}_cell_type.${type}`
       if (type === 'pdf') {
         fetch(fsURl).then(res => {
           res.blob().then(blob => {
@@ -232,7 +232,7 @@ export default {
       this.fetchMarkers(this.params)
     },
     async getTableData(params){
-      const csvFilePath = `/BCAGitPages/markersBy${this.atlasMarkerBtn}/${params.atlas}_${params.region}_${params.cellType}_cell_type.csv`
+      const csvFilePath = `/markersBy${this.atlasMarkerBtn}/${params.atlas}_${params.region}_${params.cellType}_cell_type.csv`
       let jsonData
       const csvContent = await fetch(csvFilePath)
         .then(response => response.text())

@@ -17,7 +17,7 @@
 <!--          第一次是请求方式读取资源-->
 <!--        <el-image v-if="params.region!=''" :src="`${NODE_ENV}/data/volcano/RegionDEG/${params.atlas}_${params.region}.png`" alt="">-->
 <!--          第二次是更换资源读取方式&#45;&#45;读取项目中public目录下面的资源-->
-       <el-image :src="`/BCAGitPages/volcano/RegionDEG/${params.atlas}_${params.region}.png`" alt="" style="width:58%">
+       <el-image :src="`/volcano/RegionDEG/${params.atlas}_${params.region}.png`" alt="" style="width:58%">
         <template #error>
             <div class="image-slot">
               <el-empty description="Not available in current version of Brain Cell Atals"></el-empty>
