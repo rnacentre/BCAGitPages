@@ -154,7 +154,7 @@ export default {
   methods: {
     //更换文件数据获取方式
     async getTableData(){
-      const csvFilePath = '/datasets_view.csv'
+      const csvFilePath = `${apiBaseUrl}/datasets_view.csv`
       const csvContent = await fetch(csvFilePath)
         .then(response => response.text())
         .then(csvText => {

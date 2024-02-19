@@ -162,7 +162,7 @@ export default {
     },
     async getLoadData(params,chartType,geneVal) {
       //let jsonDataModule1 = await import(`../../../mock/BCAWebJson/json/${params['atlas']}_${params['region'].trim()}_umap.json`);
-      let res = await axios.get(`/json/${params['atlas']}_${params['region'].trim()}_umap.json`)
+      let res = await axios.get(`${apiBaseUrl}/json/${params['atlas']}_${params['region'].trim()}_umap.json`)
       console.log(166, `/json/${params['atlas']}_${params['region'].trim()}_umap.json`, res.data)
       let xyJsonData = res.data; // 提取默认导出的散点图 JSON 数据
       const umapChartData = this.dealUmapData(xyJsonData, chartType, [])
@@ -172,7 +172,7 @@ export default {
       //绘制右边表达量散点图
       if(geneVal){
         //let jsonDataModule2 = await import(`/json/gene/${params['atlas']}/${params['region'].trim()}/${geneVal}.json`);
-        const res2 = await axios.get(`/json/gene/${params['atlas']}/${params['region'].trim()}/${geneVal}.json`)
+        const res2 = await axios.get(`${apiBaseUrl}/json/gene/${params['atlas']}/${params['region'].trim()}/${geneVal}.json`)
         console.log(177, `/json/gene/${params['atlas']}/${params['region'].trim()}/${geneVal}.json`)
         let expJsonData = res2.data // 提取默认导出的表达量 JSON 数据
         let expsDataArr = expJsonData.exps.split(',').map(item=>Number(item))
@@ -181,7 +181,7 @@ export default {
 
       //获取gene下拉框的数据
       //let jsonDataModule3 = await import(`../../../mock/BCAWebJson/json/geneIndex/${params['atlas']}.json`);
-      let geneRes = await axios.get(`/json/geneIndex/${params['atlas']}.json`)
+      let geneRes = await axios.get(`${apiBaseUrl}/json/geneIndex/${params['atlas']}.json`)
       console.log(187, `/json/geneIndex/${params['atlas']}.json`)
       let geneJsonData = geneRes.data// 提取默认导出的基因 JSON 数据
       this.sliceGeneOptions = geneJsonData.slice(0,20)

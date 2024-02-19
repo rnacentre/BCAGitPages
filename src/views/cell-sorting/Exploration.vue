@@ -362,20 +362,20 @@ export default {
     },
     //动态获取json数据
     async getLoadData(params,geneVal) {
-      const res1 = await axios.get(`/json/pie/${params['atlas']}_${params['region'].trim()}.json`)
+      const res1 = await axios.get(`${apiBaseUrl}/json/pie/${params['atlas']}_${params['region'].trim()}.json`)
       console.log(366, `/json/pie/${params['atlas']}_${params['region'].trim()}.json`)
       let jsonData = res1.data; // 提取默认导出的 JSON 数据
       await this.dealChartData(jsonData)
 
      //组合箱线图数据
-      let res2 = await axios.get(`/json/${params['atlas']}_${params['region'].trim()}_umap.json`)
+      let res2 = await axios.get(`${apiBaseUrl}/json/${params['atlas']}_${params['region'].trim()}_umap.json`)
       console.log(373, `/json/${params['atlas']}_${params['region'].trim()}_umap.json`)
       //let jsonDataModule2 = await import(`../../../mock/BCAWebJson/json/${params['atlas']}_${params['region'].trim()}_umap.json`);
       //let jsonDataModule2 = res2.data; // 提取SON 数据
       let xyJsonData =res2.data; // 提取默认导出的散点图 JSON 数据
 
       if(geneVal){
-        res2 = await axios.get(`/json/gene/Fetal/Pons/${geneVal}.json`)
+        res2 = await axios.get(`${apiBaseUrl}/json/gene/Fetal/Pons/${geneVal}.json`)
         console.log(380, `/json/gene/Fetal/Pons/${geneVal}.json`)
         //let jsonDataModule2 =  await import(`../../../mock/BCAWebJson/json/gene/Fetal/Pons/${geneVal}.json`);
         //let jsonDataModule2 =  res2.data; // 提取SON 数据
@@ -390,7 +390,7 @@ export default {
       }
 
       //获取gene下拉框的数据
-      const res3 = await axios.get(`/json/geneIndex/${params['atlas']}.json`)
+      const res3 = await axios.get(`${apiBaseUrl}/json/geneIndex/${params['atlas']}.json`)
       console.log(395, `/json/geneIndex/${params['atlas']}.json`)
       //let jsonDataModule3 = await import(`../../../mock/BCAWebJson/json/geneIndex/${params['atlas']}.json`);
       //let jsonDataModule3 = res3.data; // 提取SON 数据

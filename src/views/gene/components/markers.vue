@@ -21,7 +21,7 @@
 <!--          第一次是请求方式读取资源-->
 <!--          <el-image :src="`${NODE_ENV}/data/volcano/VolcanoBy${atlasMarkerBtn}/${params.atlas}_${params.region}_${params.cellType}.png`" alt="" style="width:58%">-->
 <!--         第二次是更换资源读取方式--读取项目中public目录下面的资源-->
-          <el-image :src="`/volcano/VolcanoBy${atlasMarkerBtn}/${params.atlas}_${params.region}_${params.cellType}.png`" alt="" style="width:58%">
+          <el-image :src="`${apiBaseUrl}/volcano/VolcanoBy${atlasMarkerBtn}/${params.atlas}_${params.region}_${params.cellType}.png`" alt="" style="width:58%">
             <template #error>
               <div class="image-slot">
                 <el-empty description="Not available in current version of Brain Cell Atals"></el-empty>
