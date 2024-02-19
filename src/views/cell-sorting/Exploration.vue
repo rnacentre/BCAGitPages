@@ -188,8 +188,8 @@ export default {
       Plotly.newPlot('boxChartContainer', data,layout);
       window.addEventListener('resize', () => {
         // 获取新的窗口大小
-        const newWidth = elementsBox[0].offsetWidth;
-        const newHeight = elementsBox[0].offsetHeight;
+        const newWidth = elementsBox[0]?.offsetWidth;
+        const newHeight = elementsBox[0]?.offsetHeight;
 
         // 使用 relayout 方法重新布局图表
         Plotly.relayout('boxChartContainer', {
@@ -224,8 +224,8 @@ export default {
       };
       //饼图样式配置参数
       let pieLayout = {
-        width: elementsLeft[0].offsetWidth,  // 初始宽度
-        height: elementsLeft[0].offsetHeight,  // 初始高度
+        width: elementsLeft[0]?.offsetWidth,  // 初始宽度
+        height: elementsLeft[0]?.offsetHeight,  // 初始高度
         margin:{
           t:15, //调整图之间的间距
           b:0
@@ -248,8 +248,8 @@ export default {
       };
       //堆叠图样式配置参数
       let barLayout = {
-        width: elementsRight[0].offsetWidth,  // 初始宽度
-        height: elementsRight[0].offsetHeight,  // 初始高度
+        width: elementsRight[0]?.offsetWidth,  // 初始宽度
+        height: elementsRight[0]?.offsetHeight,  // 初始高度
         legend:{
           itemclick:false,//控制图例点击效果
           itemdoubleclick:false,//控制双击图例效果
@@ -282,8 +282,8 @@ export default {
       Plotly.newPlot(this.$refs.barChartContainer, speciesCountValues, barLayout,config);
       window.addEventListener('resize', () => {
         // 获取新的窗口大小
-        const newWidth = elementsLeft[0].offsetWidth;
-        const newHeight = elementsLeft[0].offsetHeight;
+        const newWidth = elementsLeft[0]?.offsetWidth;
+        const newHeight = elementsLeft[0]?.offsetHeight;
 
         // 使用 relayout 方法重新布局图表
         Plotly.relayout('pieChartContainer', {
@@ -293,8 +293,8 @@ export default {
       });
       window.addEventListener('resize', () => {
         // 获取新的窗口大小
-        const newWidth = elementsRight[0].offsetWidth;
-        const newHeight = elementsRight[0].offsetHeight;
+        const newWidth = elementsRight[0]?.offsetWidth;
+        const newHeight = elementsRight[0]?.offsetHeight;
 
         // 使用 relayout 方法重新布局图表
         Plotly.relayout('barChartContainer', {

@@ -247,7 +247,7 @@ export default {
         const newHeight = elements[0]?.offsetHeight;
 
         // 使用 relayout 方法重新布局图表
-        Plotly.relayout('scatterChartRefLeft', {
+        Plotly.relayout(container, {
           width: newWidth,
           height: newHeight
         });
