@@ -3,6 +3,16 @@
     <!-- <div class="wrap"> -->
     <!-- <component :is="component" :key="component.name" :atlasName="atlasName" /> -->
     <IndexComp />
+    <div class="wrap">
+    <div class="contact-wrap">
+    <div class="mtit">
+        <div class="t">Cite us</div>
+        <div class="f">
+          <p>Chen, Xinyue & Huang, Yin & Huang, Ziliang & Xu, Lahong & Huang, Liangfeng & Ye, Mingli & You, Renke & Zhang, Xuegong & Miao, Zhichao*. (2023). Brain Cell Atlas: An Integrative Ensemble of Cell Transcriptomes Across Human Brain Regions. 10.21203/rs.3.rs-3221500/v1. </p>
+        </div>
+      </div>
+    </div>
+  </div>
     <div style="height: 30px"></div>
     <!-- </div> -->
 
@@ -44,3 +54,17 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+.contact-wrap {
+  margin-top: 60px;
+}
+.mtit {
+  .t {
+    font-size: 24px;
+    line-height: 62px;
+  }
+  .f p {
+    padding-top: 0px;
+  }
+}
+</style>
