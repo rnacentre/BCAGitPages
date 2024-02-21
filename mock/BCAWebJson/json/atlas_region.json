@@ -1,6 +1,10 @@
 {
   "Adult": [
     {
+      "label": "All",
+      "value": "all"
+    },
+    {
       "label": "Basal ganglia",
       "value": "Basal ganglia"
     },
@@ -15,10 +19,6 @@
     {
       "label": "Cerebral cortex ",
       "value": "Cerebral cortex "
-    },
-    {
-      "label": "all",
-      "value": "all"
     },
     {
       "label": "Pons",
@@ -99,6 +99,10 @@
   ],
   "Tumour": [
     {
+      "label": "All",
+      "value": "all"
+    },
+    {
       "label": "Parietal lobe",
       "value": "Parietal lobe"
     },
@@ -115,10 +119,6 @@
       "value": "Pons"
     },
     {
-      "label": "all",
-      "value": "all"
-    },
-    {
       "label": "Thalamus",
       "value": "Thalamus"
     },
@@ -132,6 +132,10 @@
     }
   ],
   "Fetal": [
+    {
+      "label": "All",
+      "value": "all"
+    },
     {
       "label": "Pituitary gland",
       "value": "Pituitary gland"
@@ -155,10 +159,6 @@
     {
       "label": "Choroid",
       "value": "Choroid"
-    },
-    {
-      "label": "all",
-      "value": "all"
     },
     {
       "label": "Hippocampus",
@@ -251,11 +251,15 @@
   ],
   "Mouse": [
     {
-      "label": "all",
+      "label": "All",
       "value": "all"
     }
   ],
   "Organoid": [
+    {
+      "label": "All",
+      "value": "all"
+    },
     {
       "label": "Frontal lobe",
       "value": "Frontal lobe"
@@ -267,10 +271,6 @@
     {
       "label": "Temporal lobe",
       "value": "Temporal lobe"
-    },
-    {
-      "label": "all",
-      "value": "all"
     },
     {
       "label": "Midbrain",
