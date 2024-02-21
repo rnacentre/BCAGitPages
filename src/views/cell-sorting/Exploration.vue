@@ -77,8 +77,8 @@ export default {
       // geneFeatures:'A1BG',//存储当前选中的features参数
       geneFeatures:'GAPDH',//测试gene1:GAPDH 测试gene2:RPS19
       datasetParams:{//存储页面初始默认展示的参数
-        "atlas": "Fetal",
-        "region": "Pons"
+        "atlas": "Adult",
+        "region": "all"
       },
       geneOptions:[],
       sliceGeneOptions:[],
@@ -362,14 +362,14 @@ export default {
     },
     //动态获取json数据
     async getLoadData(params,geneVal) {
-      const res1 = await axios.get(`${apiBaseUrl}/json/pie/${params['atlas']}_${params['region'].trim()}.json`)
-      console.log(366, `/json/pie/${params['atlas']}_${params['region'].trim()}.json`)
+      const res1 = await axios.get(`${apiBaseUrl}/json/pie/${params['atlas']}_${params['region']}.json`)
+      console.log(366, `/json/pie/${params['atlas']}_${params['region']}.json`)
       let jsonData = res1.data; // 提取默认导出的 JSON 数据
       await this.dealChartData(jsonData)
 
      //组合箱线图数据
-      let res2 = await axios.get(`${apiBaseUrl}/json/${params['atlas']}_${params['region'].trim()}_umap.json`)
-      console.log(373, `/json/${params['atlas']}_${params['region'].trim()}_umap.json`)
+      let res2 = await axios.get(`${apiBaseUrl}/json/${params['atlas']}_${params['region']}_umap.json`)
+      console.log(373, `/json/${params['atlas']}_${params['region']}_umap.json`)
       //let jsonDataModule2 = await import(`../../../mock/BCAWebJson/json/${params['atlas']}_${params['region'].trim()}_umap.json`);
       //let jsonDataModule2 = res2.data; // 提取SON 数据
       let xyJsonData =res2.data; // 提取默认导出的散点图 JSON 数据

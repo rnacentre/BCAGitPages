@@ -83,12 +83,12 @@ export default {
         selectedGeneGroupIndex: -1,//不要改这个key
       },
       colorBy:'cell_type',//存储当前选中的color by的参数
-      geneFeatures:'A1BG',//存储当前选中的features参数
+      geneFeatures:'MALAT1',//存储当前选中的features参数
       colorByOptions:[],
       geneOptions:[],
       datasetParams:{//存储页面初始默认展示的参数
-        "atlas": "Fetal",
-        "region": "Pons"//Tumour_Pons_umap
+        "atlas": "Adult",
+        "region": "all"//Tumour_Pons_umap
       },
       sliceGeneOptions:[],
       loading: false,
@@ -162,8 +162,8 @@ export default {
     },
     async getLoadData(params,chartType,geneVal) {
       //let jsonDataModule1 = await import(`../../../mock/BCAWebJson/json/${params['atlas']}_${params['region'].trim()}_umap.json`);
-      let res = await axios.get(`${apiBaseUrl}/json/${params['atlas']}_${params['region'].trim()}_umap.json`)
-      console.log(166, `/json/${params['atlas']}_${params['region'].trim()}_umap.json`, res.data)
+      let res = await axios.get(`${apiBaseUrl}/json/${params['atlas']}_${params['region']}_umap.json`)
+      console.log(166, `/json/${params['atlas']}_${params['region']}_umap.json`, res.data)
       let xyJsonData = res.data; // 提取默认导出的散点图 JSON 数据
       const umapChartData = this.dealUmapData(xyJsonData, chartType, [])
       //绘制左边第一个散点图
@@ -172,8 +172,8 @@ export default {
       //绘制右边表达量散点图
       if(geneVal){
         //let jsonDataModule2 = await import(`/json/gene/${params['atlas']}/${params['region'].trim()}/${geneVal}.json`);
-        const res2 = await axios.get(`${apiBaseUrl}/json/gene/${params['atlas']}/${params['region'].trim()}/${geneVal}.json`)
-        console.log(177, `/json/gene/${params['atlas']}/${params['region'].trim()}/${geneVal}.json`)
+        const res2 = await axios.get(`${apiBaseUrl}/json/gene/${params['atlas']}/${params['region']}/${geneVal}.json`)
+        console.log(177, `/json/gene/${params['atlas']}/${params['region']}/${geneVal}.json`)
         let expJsonData = res2.data // 提取默认导出的表达量 JSON 数据
         let expsDataArr = expJsonData.exps.split(',').map(item=>Number(item))
         await this.selectUmapGene(geneVal,xyJsonData,'cell_type',expsDataArr)

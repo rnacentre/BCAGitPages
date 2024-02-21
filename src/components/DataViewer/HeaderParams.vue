@@ -66,8 +66,8 @@ export default {
   data(){
     return{
       form: {
-        atlas: 'Fetal',
-        region: 'Pons',
+        atlas: 'Adult',
+        region: 'all',
       },
       altasOptionsData:[
         {
@@ -105,7 +105,7 @@ export default {
     }
   },
   mounted(){
-    this.changeAtlas('Fetal')
+    this.changeAtlas('Adult')
   }
 }
 </script>
