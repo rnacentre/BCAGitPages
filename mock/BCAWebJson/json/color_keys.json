@@ -238,7 +238,7 @@
     },
     {
       "label": "Cell Type",
-      "value": "original_name"
+      "value": "cell_type"
     },
     {
       "label": "Sample",
