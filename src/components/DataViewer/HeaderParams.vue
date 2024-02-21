@@ -35,7 +35,7 @@
         </el-option>
       </el-select>
     </el-form-item>
-    <el-button class="submit-button" type="primary" @click="submitParams(form)">Submits</el-button>
+    <el-button class="submit-button" type="primary" @click="submitParams(form)">Submit</el-button>
   </el-form>
 </div>
 </template>
@@ -112,7 +112,7 @@ export default {
 
 <style scoped>
 .params-form{
-  height: 130px;
+  height: 88px;
   border-radius: 20px;
   margin-top: 15px;
   display: flex;
@@ -124,9 +124,10 @@ export default {
 .params-form :deep(.el-form-item__label){
   font-size: 24px;
   font-weight: bold;
+  color:#333333
 }
 .params-form .el-form-item {
-  width: 40%; /* 设置每个 el-form-item 的宽度，总和小于 100% 实现两个并排 */
+  width: 18%; /* 设置每个 el-form-item 的宽度，总和小于 100% 实现两个并排 */
   margin-bottom: 0;
 }
 </style>
