@@ -199,8 +199,8 @@ export const routes = [
         },
       },
       {
-        path: "/dataSets",
-        name: "dataSets",
+        path: "/dataSet",
+        name: "dataSet",
         component: () => import("@/views/reference"),
         meta: {
           title: "Datasets",
