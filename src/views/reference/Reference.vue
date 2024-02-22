@@ -166,9 +166,9 @@ export default {
               let jsonData = result.data;
               for (let i = 0; i < jsonData.length; i++) {
                 this.tableData.push({
-                  Species:jsonData[i]['Species'],
+                  Species: jsonData[i]['Species'],
                   Atlas: jsonData[i]['Atlas'],
-                  Tissue:jsonData[i]['Tissue'],
+                  Tissue: jsonData[i]['Tissue'],
                   Status: jsonData[i]['Status'],
                   Platform: jsonData[i]['Platform'],
                   'Seq-type': jsonData[i]['Seq-type'],
@@ -177,6 +177,7 @@ export default {
                   Link: jsonData[i]['Link']
                 })
               }
+              this.frozenData = this._.cloneDeep(this.tableData)
 
             },
             error: error => {
@@ -185,13 +186,13 @@ export default {
           });
         })
     },
-    toLink (link) {
+    toLink(link) {
       if (link)
         window.open(link)
       else
         return
     },
-    async fetchDetail () {
+    async fetchDetail() {
       // const loading = Loading.service({
       //   lock: true,
       //   text: 'Loading',
@@ -224,7 +225,7 @@ export default {
           this.selectKeyArray[key] = [...(new Set(result[key]))]
         })
         this.tableData = tableData
-        this.frozenData = tableData
+        this.frozenData = this._.cloneDeep(this.tableData)
         this.reference = result
         // loading.close()
       } catch (error) {
@@ -232,7 +233,7 @@ export default {
         // loading.close()
       }
     },
-    headerChange (value, objName) {
+    headerChange(value, objName) {
       const selectMap = Object.keys(this.columnSelect).filter((key) => {
         return this.columnSelect[key] != ""
       })
@@ -251,7 +252,7 @@ export default {
       this.searchKey = ''
     },
     // search事件，回车时触发,搜索全局数据
-    searchChange (value) {
+    searchChange(value) {
       if (value === '' || !value) {
         this.tableData = this.frozenData
         return
@@ -276,7 +277,7 @@ export default {
 
     }
   },
-  async mounted () {
+  async mounted() {
     // await this.fetchDetail() //请求不通(500)先注释了
     await this.getTableData() //更换文件数据获取方式(public文件下面的数据的)
   }
@@ -288,9 +289,11 @@ export default {
   margin-bottom: 20px;
   // overflow-y: auto;
 }
+
 .el-dropdown {
   color: #909399;
 }
+
 .link {
   color: #409eff;
   text-decoration: underline;
@@ -306,6 +309,7 @@ export default {
     color: #333;
   }
 }
+
 .el-table th.el-table__cell > .cell {
   word-break: break-word;
 }

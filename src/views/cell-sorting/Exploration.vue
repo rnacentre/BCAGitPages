@@ -47,7 +47,7 @@
             </el-select>
           </div>
 
-          <div class="box-chart canvas-h">
+          <div class="box-chart canvas-h" style="height:400px;">
             <div id="boxChartContainer" ref="expBoxPlot"></div>
           </div>
         </div>
@@ -87,15 +87,26 @@ export default {
       noMore: false,
     }
   },
+  watch:{
+    datasetParams:{
+      handler(val){
+        if(this.datasetParams.atlas==='Mouse'){
+          this.geneFeatures='Malat1'
+        }else{
+          this.geneFeatures='MALAT1'
+        }
+      }
+    }
+  },
   methods: {
     filterValue(query) {
       if (query !== "") {
-       let filterOptions = this.geneOptions.filter((item) => {
+        let filterOptions = this.geneOptions.filter((item) => {
           // 这里是用的value选项筛选，默认是label
           return item.value.toLowerCase().indexOf(query.toLowerCase()) > -1;
         });
-          let options = filterOptions.slice(0,20)
-          this.$set(this,"sliceGeneOptions",options)
+        let options = filterOptions.slice(0,20)
+        this.$set(this,"sliceGeneOptions",options)
       } else {
         this.sliceGeneOptions = [];
       }
@@ -128,15 +139,15 @@ export default {
     drawHeatMapData(heatmapData, textColor) {
       let allLayout = {
         title: 'human & mouse',
-          margin:{
+        margin:{
           l:130, //解决Y轴显示的值超出
-            b:115,
+          b:115,
         },
         xaxis:{
           tickmode: "array",
-            tickangle:-60,
-            zeroline:false,//不显示纵坐标轴
-            autotick:false, //是否绘制刻度线标签
+          tickangle:-60,
+          zeroline:false,//不显示纵坐标轴
+          autotick:false, //是否绘制刻度线标签
         },
       }
       //设置图片导出的参数
@@ -183,8 +194,10 @@ export default {
       }
       const layout = {
         margin: {
-          b: 100,
+          t:30,
+          b: 140,
         },
+        autosize:true
       };
       Plotly.newPlot('boxChartContainer', data,layout);
       window.addEventListener('resize', () => {
@@ -228,10 +241,17 @@ export default {
         width: elementsLeft[0].offsetWidth,  // 初始宽度
         height: elementsLeft[0].offsetHeight,  // 初始高度
         margin:{
-          t:15, //调整图之间的间距
-          b:0
+          t:80, //调整图之间的间距
+          b:100
         },
-        grid: {rows:1, columns:2},
+        title: {
+          text:`${this.datasetParams['atlas']} ${this.datasetParams['region']}`,
+          font:{
+            size:16,
+          },
+          position:'top center'
+        },
+        // grid: {rows:1, columns:1},
         uniformtext:{  //设置比较小的占比数不显示
           minsize:10,
           mode:'hide',
@@ -262,7 +282,8 @@ export default {
           },
           tickfont:{  //设置刻度字的大小
             size:10,
-          }
+          },
+          tickangle: 30
         },
         yaxis: {
           title: 'cell number',
@@ -276,6 +297,7 @@ export default {
         barmode: 'stack',//堆叠类型
         margin: {
           t: 30, //调整图的间距
+          b:150
         },
       };
       // 画图
@@ -338,13 +360,6 @@ export default {
           values: humanCountData,  //human数据
           labels: nameValueArr,
           type: 'pie',
-          title: {
-            text:`${this.datasetParams['atlas']}_${this.datasetParams['region']}`,
-            font:{
-              size:16,
-            },
-            position:'top center'
-          },
           insidetextorientation:'radial',
           textposition: "inside",
           marker: {
@@ -367,7 +382,7 @@ export default {
       let jsonData = res1.data; // 提取默认导出的 JSON 数据
       await this.dealChartData(jsonData)
 
-     //组合箱线图数据
+      //组合箱线图数据
       let res2 = await axios.get(`${apiBaseUrl}/json/${params['atlas']}_${params['region']}_umap.json`)
       console.log(373, `/json/${params['atlas']}_${params['region']}_umap.json`)
       //let jsonDataModule2 = await import(`../../../mock/BCAWebJson/json/${params['atlas']}_${params['region'].trim()}_umap.json`);
