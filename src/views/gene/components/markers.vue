@@ -184,7 +184,8 @@ export default {
       pageSizes: [50, 100],
       loading: true,
       VolcanoMarkerBy: "VolcanoByRegion",
-      NODE_ENV: process.env.NODE_ENV === "production" ? "" : "/api",
+      // NODE_ENV: process.env.NODE_ENV === "production" ? "" : "/api",
+      apiBaseUrl: "https://data.braincellatlas.org",
       columnSelect: { C0: '', avg_log2FC: '', p_val: '', p_val_adj: '', 'pct.1': '', 'pct.2': '' },
       selectKeyArray: {},
       columnList: ['C0', 'avg_log2FC', 'p_val', 'p_val_adj', 'pct.1', 'pct.2']
@@ -232,7 +233,7 @@ export default {
       this.fetchMarkers(this.params)
     },
     async getTableData(params){
-      const csvFilePath = `/markersBy${this.atlasMarkerBtn}/${params.atlas}_${params.region}_${params.cellType}_cell_type.csv`
+      const csvFilePath = `${apiBaseUrl}/markersBy${this.atlasMarkerBtn}/${params.atlas}_${params.region}_${params.cellType}_cell_type.csv`
       let jsonData
       const csvContent = await fetch(csvFilePath)
         .then(response => response.text())

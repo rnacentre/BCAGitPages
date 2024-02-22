@@ -73,7 +73,8 @@ export default {
         cellType: "Lower rhombic lip",
       },
       imgSrc: "",
-      NODE_ENV: process.env.NODE_ENV === "production" ? "" : "/api",
+      // NODE_ENV: process.env.NODE_ENV === "production" ? "" : "/api",
+      apiBaseUrl: "https://data.braincellatlas.org",
     };
   },
   methods: {

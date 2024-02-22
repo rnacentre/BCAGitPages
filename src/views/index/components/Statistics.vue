@@ -39,13 +39,13 @@ export default {
     return {
       list: [
         {
-          num: 77,
+          num: 173,
           content: "Studies",
           icon: "img/brain/stats-icon-studies.png",
           uri: '/help#Datasets'
         },
         {
-          num: "11M",
+          num: "26.3M",
           // unit: "M",
           content: "Cells",
           icon: "img/brain/stats-icon-cells.png",
