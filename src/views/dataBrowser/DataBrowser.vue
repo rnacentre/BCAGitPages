@@ -229,7 +229,7 @@ export default {
           r: 0,
         },
         aspectratio: {
-          x: 1, // 横向比例
+          x: 0.5, // 横向比例
           y: 1  // 纵向比例
         },
         hovermode: 'closest',//默认开启 Show closest data on hover

@@ -147,7 +147,7 @@ export default {
         Download: ''
       },
       selectKeyArray: {},
-      columnList: ['Species', 'Atlas', 'Tissue', 'Status', 'Platform', 'Seq-type', 'Year', 'Accession', 'Link', 'DatasetsURL'],
+      columnList: ['Species', 'Atlas', 'Tissue', 'Status', 'Platform', 'Seq-type', 'Year', 'Accession', 'Link', 'share'],
       loading: true
     }
   },
@@ -176,7 +176,8 @@ export default {
                   'Seq-type': jsonData[i]['Seq-type'],
                   Year: jsonData[i]['Year'],
                   Accession: jsonData[i]['Accession'],
-                  Link: jsonData[i]['Link']
+                  Link: jsonData[i]['Link'],
+                  Download: jsonData[i]['share']
                 })
               }
               this.frozenData = this._.cloneDeep(this.tableData)
@@ -220,7 +221,7 @@ export default {
             Year: result["Year"][i],
             Accession: result["Accession"][i],
             Link: result["Link"][i],
-            Download: result["DatasetsURL"][i]
+            Download: result["share"][i]
           })
         })
         const keys = Object.keys(result)
