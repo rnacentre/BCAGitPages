@@ -54,9 +54,9 @@
 
       </div>
       <!--    绘制热图-->
-      <div class="canvas-container last-container">
+      <!-- <div class="canvas-container last-container">
         <div class="heat-map-container canvas-h" ref="heatmapChartRef"></div>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
