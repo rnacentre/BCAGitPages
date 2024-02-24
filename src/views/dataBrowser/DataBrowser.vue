@@ -161,7 +161,7 @@ export default {
       if (this.datasetParams.atlas === 'Mouse') {
         this.geneFeatures = 'Malat1'
       } else {
-        this.geneFeatures = 'MALAT1'
+        this.geneFeatures = 'GFAP'
       }
       this.$set(this, "colorByOptions", color_keys[params['atlas']])
       this.plotLoading = true
