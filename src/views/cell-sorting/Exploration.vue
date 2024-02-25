@@ -47,7 +47,7 @@
             </el-select>
           </div>
 
-          <div class="box-chart canvas-h" style="height:400px;">
+          <div class="box-chart box-canvas-h">
             <div id="boxChartContainer" ref="expBoxPlot"></div>
           </div>
         </div>
@@ -64,7 +64,7 @@
 <script>
 import HeaderParams from "@/components/DataViewer/HeaderParams";
 import Plotly from 'plotly.js-dist-min'
-import { celltyleColorData } from "../../../mock/chartcolor"
+import { celltyleColorData,chartColor } from "../../../mock/chartcolor"
 import { heatmapData,textColor } from "../../../mock/heatmapData";
 import axios from "axios";
 export default {
@@ -193,6 +193,7 @@ export default {
         })
       }
       const layout = {
+        height: 400,//和绘图外面的盒子高度保持一致
         margin: {
           t:30,
           b: 140,
@@ -348,12 +349,12 @@ export default {
           width:0.6,
           marker: {   //控制人类色柱的颜色
             // color: '#62A3CB',
-            color:celltyleColorData
+            color:chartColor
           }
         }
       }
       speciesCountValues.push(humanTrace)
-      let pieChartColors = [celltyleColorData,[]]; //存储饼图对应的颜色数据
+      let pieChartColors = [chartColor,[]]; //存储饼图对应的颜色数据
       // 组合饼图数据
       pieChartData = [
         {
@@ -415,7 +416,7 @@ export default {
     },
   },
   async mounted(){
-    this.drawHeatMapData(heatmapData,textColor)
+    // this.drawHeatMapData(heatmapData,textColor)
     await this.getLoadData(this.datasetParams,this.geneFeatures)
 
     this.$refs.geneSelect.$refs.scrollbar.$refs.wrap.addEventListener('scroll',this.scolling)
@@ -447,6 +448,9 @@ export default {
 }
 .canvas-h{
   height:600px;
+}
+.box-canvas-h{
+  height:400px;
 }
 .last-container{
   margin-bottom: 15px
