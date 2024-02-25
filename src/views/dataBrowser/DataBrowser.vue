@@ -43,6 +43,8 @@
             v-model="geneFeatures"
             placeholder="please select gene"
             @change="switchUmapGene(geneFeatures)"
+            :filter-method="filterValue"
+            clearable
             filterable
           >
 
