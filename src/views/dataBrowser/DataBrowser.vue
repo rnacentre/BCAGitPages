@@ -221,17 +221,17 @@ export default {
         // },
         legend: {
           x: 0,
-          y: -0.15,
+          y: -0.03,
           itemsizing: "constant",//设置图例大小为固定值
           orientation: 'h',
           traceorder: 'reversed' //调整图例的顺序
         },
         margin: {
           t: 50,
-          r: 0,
+          r: 50,
         },
         aspectratio: {
-          x: 0.5, // 横向比例
+          x: 1, // 横向比例
           y: 1  // 纵向比例
         },
         hovermode: 'closest',//默认开启 Show closest data on hover

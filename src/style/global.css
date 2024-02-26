@@ -29,7 +29,7 @@
 }
 .scatter-container .left-scatter,.right-scatter{
   width:100%;
-  /*height:700px;*/
+  height: 900px;
   aspect-ratio: 1;
 }
 .scatter-container div:first-child{
