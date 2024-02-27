@@ -65,9 +65,10 @@
           <el-table-column v-for="column in columnList" :key="column" :prop="column" :label="column" :sortable="column!=='Link'">
             <el-table-column :prop="column" v-if="column!=='Link'">
               <template #header>
-                <el-select placeholder="filter" v-model="columnSelect['Species']" @change="(value) => headerChange(value, 'Species')" clearable>
-                  <el-option value="">All </el-option>
-                </el-select>
+<!--                <el-select placeholder="filter" v-model="columnSelect['Species']" @change="(value) => headerChange(value, 'Species')" clearable>-->
+<!--                  <el-option value="">All </el-option>-->
+<!--                </el-select>-->
+                <el-input v-model="columnSelect[column]"  @input="headerChange(columnSelect[column], column)"></el-input>
               </template>
             </el-table-column>
           </el-table-column>
@@ -76,10 +77,12 @@
           <el-table-column prop="C0" label="genes" sortable>
             <el-table-column prop="C0">
               <template #header>
-                <el-select placeholder="filter" v-model="columnSelect['C0']" @change="(value) => headerChange(value, 'C0')">
-                  <el-option value="">All </el-option>
-                  <el-option v-for="(item, index) in selectKeyArray['C0']" :key="`C0${item}${index}`" :value="item">{{ item }}</el-option>
-                </el-select>
+<!--                <el-select placeholder="filter" v-model="columnSelect['C0']" @change="(value) => headerChange(value, 'C0')">-->
+<!--                  <el-option value="">All </el-option>-->
+<!--                  <el-option v-for="(item, index) in selectKeyArray['C0']" :key="`C0${item}${index}`" :value="item">{{ item }}</el-option>-->
+<!--                </el-select>-->
+
+                <el-input v-model="columnSelect['C0']" clearable  @input="headerChange(columnSelect['C0'], 'C0')"></el-input>
               </template>
               <template slot-scope="scope">
                 {{ scope.row["C0"] || "-" }}
@@ -89,10 +92,12 @@
           <el-table-column prop="avg_log2FC" label="avg_log2FC" sortable>
             <el-table-column prop="avg_log2FC">
               <template #header>
-                <el-select placeholder="filter" v-model="columnSelect['avg_log2FC']" @change="(value) => headerChange(value, 'avg_log2FC')">
-                  <el-option value="">All </el-option>
-                  <el-option v-for="(item, index) in selectKeyArray['avg_log2FC']" :key="`avg_log2FC${item}${index}`" :value="item">{{ item }}</el-option>
-                </el-select>
+<!--                <el-select placeholder="filter" v-model="columnSelect['avg_log2FC']" @change="(value) => headerChange(value, 'avg_log2FC')">-->
+<!--                  <el-option value="">All </el-option>-->
+<!--                  <el-option v-for="(item, index) in selectKeyArray['avg_log2FC']" :key="`avg_log2FC${item}${index}`" :value="item">{{ item }}</el-option>-->
+<!--                </el-select>-->
+
+                <el-input v-model="columnSelect['avg_log2FC']" clearable  @input="headerChange(columnSelect['avg_log2FC'], 'avg_log2FC')"></el-input>
               </template>
               <template slot-scope="scope">
                 {{ scope.row["avg_log2FC"] || "-" }}
@@ -102,10 +107,12 @@
           <el-table-column prop="p_val" label="p_val" sortable>
             <el-table-column prop="p_val">
               <template #header>
-                <el-select placeholder="filter" v-model="columnSelect['p_val']" @change="(value) => headerChange(value, 'p_val')">
-                  <el-option value="">All </el-option>
-                  <el-option v-for="(item, index) in selectKeyArray['p_val']" :key="`p_val${item}${index}`" :value="item">{{ item }}</el-option>
-                </el-select>
+<!--                <el-select placeholder="filter" v-model="columnSelect['p_val']" @change="(value) => headerChange(value, 'p_val')">-->
+<!--                  <el-option value="">All </el-option>-->
+<!--                  <el-option v-for="(item, index) in selectKeyArray['p_val']" :key="`p_val${item}${index}`" :value="item">{{ item }}</el-option>-->
+<!--                </el-select>-->
+
+                <el-input v-model="columnSelect['p_val']" clearable  @input="headerChange(columnSelect['p_val'], 'p_val')"></el-input>
               </template>
               <template slot-scope="scope">
                 {{ scope.row["p_val"]  }}
@@ -115,10 +122,12 @@
           <el-table-column prop="p_val_adj" label="p_val_adj" sortable>
             <el-table-column prop="p_val_adj">
               <template #header>
-                <el-select placeholder="filter" v-model="columnSelect['p_val_adj']" @change="(value) => headerChange(value, 'p_val_adj')">
-                  <el-option value="">All </el-option>
-                  <el-option v-for="(item, index) in selectKeyArray['p_val_adj']" :key="`p_val_adj${item}${index}`" :value="item">{{ item }}</el-option>
-                </el-select>
+<!--                <el-select placeholder="filter" v-model="columnSelect['p_val_adj']" @change="(value) => headerChange(value, 'p_val_adj')">-->
+<!--                  <el-option value="">All </el-option>-->
+<!--                  <el-option v-for="(item, index) in selectKeyArray['p_val_adj']" :key="`p_val_adj${item}${index}`" :value="item">{{ item }}</el-option>-->
+<!--                </el-select>-->
+
+                <el-input v-model="columnSelect['p_val_adj']" clearable  @input="headerChange(columnSelect['p_val_adj'], 'p_val_adj')"></el-input>
               </template>
               <template slot-scope="scope">
                 {{ scope.row["p_val_adj"]  }}
@@ -128,10 +137,12 @@
           <el-table-column prop="pct.1" label="pct.1" sortable>
             <el-table-column prop="pct.1">
               <template #header>
-                <el-select placeholder="filter" v-model="columnSelect['pct.1']" @change="(value) => headerChange(value, 'pct.1')">
-                  <el-option value="">All </el-option>
-                  <el-option v-for="(item, index) in selectKeyArray['pct.1']" :key="`pct1${item}${index}`" :value="item">{{ item }}</el-option>
-                </el-select>
+<!--                <el-select placeholder="filter" v-model="columnSelect['pct.1']" @change="(value) => headerChange(value, 'pct.1')">-->
+<!--                  <el-option value="">All </el-option>-->
+<!--                  <el-option v-for="(item, index) in selectKeyArray['pct.1']" :key="`pct1${item}${index}`" :value="item">{{ item }}</el-option>-->
+<!--                </el-select>-->
+
+                <el-input v-model="columnSelect['pct.1']" clearable  @input="headerChange(columnSelect['pct.1'], 'pct.1')"></el-input>
               </template>
               <template slot-scope="scope">
                 {{ scope.row["pct.1"] || "-" }}
@@ -144,10 +155,12 @@
             </template> -->
             <el-table-column prop="pct.2">
               <template #header>
-                <el-select placeholder="filter" v-model="columnSelect['pct.2']" @change="(value) => headerChange(value, 'pct.2')">
-                  <el-option value="">All </el-option>
-                  <el-option v-for="(item, index) in selectKeyArray['pct.2']" :key="`pct2${item}${index}`" :value="item">{{ item }}</el-option>
-                </el-select>
+<!--                <el-select placeholder="filter" v-model="columnSelect['pct.2']" @change="(value) => headerChange(value, 'pct.2')">-->
+<!--                  <el-option value="">All </el-option>-->
+<!--                  <el-option v-for="(item, index) in selectKeyArray['pct.2']" :key="`pct2${item}${index}`" :value="item">{{ item }}</el-option>-->
+<!--                </el-select>-->
+
+                <el-input v-model="columnSelect['pct.2']" clearable  @input="headerChange(columnSelect['pct.2'], 'pct.2')"></el-input>
               </template>
               <template slot-scope="scope">
                 {{ scope.row["pct.2"] || "-" }}
@@ -311,7 +324,8 @@ export default {
 
       selectMap.forEach((key) => {
         tableData = this.frozenData.filter(
-          (value) => value[key] === this.columnSelect[key]
+          // (value) => value[key] === this.columnSelect[key]
+          (value) => String(value[key]).toLowerCase().includes(String(this.columnSelect[key]).toLowerCase())
         )
       })
       this.tableData = selectMap.length < 1 ? this.frozenData : tableData
