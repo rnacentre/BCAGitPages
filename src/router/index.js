@@ -203,7 +203,7 @@ export const routes = [
         name: "dataSet",
         component: () => import("@/views/reference"),
         meta: {
-          title: "Datasets",
+          title: "Dataset",
           keepAlive: true,
         },
       },

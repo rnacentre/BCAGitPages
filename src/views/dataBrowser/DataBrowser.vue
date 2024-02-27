@@ -221,7 +221,7 @@ export default {
         // },
         legend: {
           x: 0,
-          y: -0.03,
+          y: -0.04,
           itemsizing: "constant",//设置图例大小为固定值
           orientation: 'h',
           traceorder: 'reversed' //调整图例的顺序
