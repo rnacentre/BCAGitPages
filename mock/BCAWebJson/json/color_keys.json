@@ -33,10 +33,6 @@
       "value": "subregion"
     },
     {
-      "label": "Sample Status",
-      "value": "sample_status"
-    },
-    {
       "label": "Sequencing Methods",
       "value": "seq_method"
     },
@@ -49,7 +45,7 @@
       "value": "project_code"
     },
     {
-      "label": "scAnnot Leve 1",
+      "label": "scAnnot Level 1",
       "value": "Siletti_modf_SCANVI_L1"
     },
     {
@@ -91,10 +87,6 @@
       "value": "subregion"
     },
     {
-      "label": "Sample Status",
-      "value": "sample_status"
-    },
-    {
       "label": "Sequencing Methods",
       "value": "seq_method"
     },
@@ -107,7 +99,7 @@
       "value": "project_code"
     },
     {
-      "label": "scAnnot Leve 1",
+      "label": "scAnnot Level 1",
       "value": "Braun_L1"
     },
     {
@@ -149,10 +141,6 @@
       "value": "subregion"
     },
     {
-      "label": "Sample Status",
-      "value": "sample_status"
-    },
-    {
       "label": "Sequencing Methods",
       "value": "seq_method"
     },
@@ -165,7 +153,7 @@
       "value": "project_code"
     },
     {
-      "label": "scAnnot Leve 1",
+      "label": "scAnnot Level 1",
       "value": "Siletti_modf_SCANVI_L1"
     },
     {
@@ -207,10 +195,6 @@
       "value": "subregion"
     },
     {
-      "label": "Sample Status",
-      "value": "sample_status"
-    },
-    {
       "label": "Sequencing Methods",
       "value": "seq_method"
     },
@@ -223,7 +207,7 @@
       "value": "project_code"
     },
     {
-      "label": "scAnnot Leve 1",
+      "label": "scAnnot Level 1",
       "value": "Siletti_modf_SCANVI_L1"
     },
     {
