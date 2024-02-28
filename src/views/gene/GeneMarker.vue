@@ -8,7 +8,7 @@
         <el-button :type="atlasMarkerBtn=='Region'?'primary':''" @click="setAtlasMarkerBtn('Region')">By Region</el-button>
         <el-button :type="atlasMarkerBtn=='CellType'?'primary':''" @click="setAtlasMarkerBtn('CellType')">By CellType</el-button>
         <!-- <p class="adult-method-cont">Search maker genes in selected markersBy{{atlasMarkerBtn}}.</p> -->
-        <p class="adult-method-cont">Search for <span class="strong">differentially expressed genes</span> of selected{{ atlasMarkerBtn=='Region'?byRegionTips:byCelltypeTips }}</p>
+        <p class="adult-method-cont">Search for <span class="strong">differentially expressed genes (DEG)</span> of selected{{ atlasMarkerBtn=='Region'?byRegionTips:byCelltypeTips }}</p>
       </div>
       <el-row :gutter="10" type="flex" align="bottom">
         <el-col :md="8" :sm="24" class="mb10">

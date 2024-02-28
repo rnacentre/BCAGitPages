@@ -112,6 +112,7 @@ export default {
           } else {
             this.geneFeatures = 'GFAP'
           }
+          this.colorBy = 'cell_type'
           this.getLoadData(this.datasetParams,this.colorBy,this.geneFeatures)
           this.$set(this, "colorByOptions", color_keys[this.datasetParams['atlas']])
         }
