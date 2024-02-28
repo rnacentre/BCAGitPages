@@ -12,42 +12,46 @@
       <el-table-column prop="Species" label="Species" sortable>
         <el-table-column prop="Species" width="100">
           <template #header>
-            <el-select placeholder="filter" v-model="columnSelect['Species']" @change="(value) => headerChange(value, 'Species')" clearable>
-              <el-option value="">All </el-option>
-              <el-option v-for="(item, index) in selectKeyArray['Species']" :key="`${item}${index}`" :value="item">{{ item }}
-              </el-option>
-            </el-select>
+<!--            <el-select placeholder="filter" v-model="columnSelect['Species']" @change="(value) => headerChange(value, 'Species')" clearable>-->
+<!--              <el-option value="">All </el-option>-->
+<!--              <el-option v-for="(item, index) in selectKeyArray['Species']" :key="`${item}${index}`" :value="item">{{ item }}-->
+<!--              </el-option>-->
+<!--            </el-select>-->
+            <el-input placeholder="filter" v-model="columnSelect['Species']" clearable  @input="headerChange(columnSelect['Species'], 'Species')"></el-input>
           </template>
         </el-table-column>
       </el-table-column>
       <el-table-column prop="Atlas" label="Atlas" sortable>
         <el-table-column prop="Atlas" show-overflow-tooltip width="100">
           <template #header>
-            <el-select placeholder="filter" v-model="columnSelect['Atlas']" @change="(value) => headerChange(value, 'Atlas')">
-              <el-option value="">All </el-option>
-              <el-option v-for="(item, index) in selectKeyArray['Atlas']" :key="`${item}${index}`" :value="item">{{ item }}
-              </el-option>
-            </el-select>
+<!--            <el-select placeholder="filter" v-model="columnSelect['Atlas']" @change="(value) => headerChange(value, 'Atlas')">-->
+<!--              <el-option value="">All </el-option>-->
+<!--              <el-option v-for="(item, index) in selectKeyArray['Atlas']" :key="`${item}${index}`" :value="item">{{ item }}-->
+<!--              </el-option>-->
+<!--            </el-select>-->
+            <el-input placeholder="filter" v-model="columnSelect['Atlas']" clearable  @input="headerChange(columnSelect['Atlas'], 'Atlas')"></el-input>
           </template>
         </el-table-column>
       </el-table-column>
       <el-table-column prop="Tissue" label="Tissue" sortable>
         <el-table-column prop="Tissue" show-overflow-tooltip>
           <template #header>
-            <el-select placeholder="filter" v-model="columnSelect['Tissue']" @change="(value) => headerChange(value, 'Tissue')">
-              <el-option value="">All </el-option>
-              <el-option v-for="(item, index) in selectKeyArray['Tissue']" :key="`${item}${index}`" :value="item">{{ item }}</el-option>
-            </el-select>
+<!--            <el-select placeholder="filter" v-model="columnSelect['Tissue']" @change="(value) => headerChange(value, 'Tissue')">-->
+<!--              <el-option value="">All </el-option>-->
+<!--              <el-option v-for="(item, index) in selectKeyArray['Tissue']" :key="`${item}${index}`" :value="item">{{ item }}</el-option>-->
+<!--            </el-select>-->
+            <el-input placeholder="filter" v-model="columnSelect['Tissue']" clearable  @input="headerChange(columnSelect['Tissue'], 'Tissue')"></el-input>
           </template>
         </el-table-column>
       </el-table-column>
       <el-table-column prop="Status" label="Status" sortable>
         <el-table-column prop="Status">
           <template #header>
-            <el-select placeholder="filter" v-model="columnSelect['Status']" @change="(value) => headerChange(value, 'Status')">
-              <el-option value="">All </el-option>
-              <el-option v-for="(item, index) in selectKeyArray['Status']" :key="`${item}${index}`" :value="item">{{ item }}</el-option>
-            </el-select>
+<!--            <el-select placeholder="filter" v-model="columnSelect['Status']" @change="(value) => headerChange(value, 'Status')">-->
+<!--              <el-option value="">All </el-option>-->
+<!--              <el-option v-for="(item, index) in selectKeyArray['Status']" :key="`${item}${index}`" :value="item">{{ item }}</el-option>-->
+<!--            </el-select>-->
+            <el-input placeholder="filter" v-model="columnSelect['Status']" clearable  @input="headerChange(columnSelect['Status'], 'Status')"></el-input>
           </template>
           <template slot-scope="scope">
             {{ scope.row["Status"] || "-" }}
@@ -57,10 +61,11 @@
       <el-table-column prop="Platform" label="Platform" sortable>
         <el-table-column prop="Platform">
           <template #header>
-            <el-select placeholder="filter" v-model="columnSelect['Platform']" @change="(value) => headerChange(value, 'Platform')">
-              <el-option value="">All </el-option>
-              <el-option v-for="(item, index) in selectKeyArray['Platform']" :key="`${item}${index}`" :value="item">{{ item }}</el-option>
-            </el-select>
+<!--            <el-select placeholder="filter" v-model="columnSelect['Platform']" @change="(value) => headerChange(value, 'Platform')">-->
+<!--              <el-option value="">All </el-option>-->
+<!--              <el-option v-for="(item, index) in selectKeyArray['Platform']" :key="`${item}${index}`" :value="item">{{ item }}</el-option>-->
+<!--            </el-select>-->
+            <el-input placeholder="filter" v-model="columnSelect['Platform']" clearable  @input="headerChange(columnSelect['Platform'], 'Platform')"></el-input>
           </template>
           <template slot-scope="scope">
             {{ scope.row["Platform"] || "-" }}
@@ -70,30 +75,33 @@
       <el-table-column label="Seq-type" sortable>
         <el-table-column prop="Seq-type">
           <template #header>
-            <el-select placeholder="filter" v-model="columnSelect['Seq-type']" @change="(value) => headerChange(value, 'Seq-type')">
-              <el-option value="">All </el-option>
-              <el-option v-for="(item, index) in selectKeyArray['Seq-type']" :key="`${item}${index}`" :value="item">{{ item }}</el-option>
-            </el-select>
+<!--            <el-select placeholder="filter" v-model="columnSelect['Seq-type']" @change="(value) => headerChange(value, 'Seq-type')">-->
+<!--              <el-option value="">All </el-option>-->
+<!--              <el-option v-for="(item, index) in selectKeyArray['Seq-type']" :key="`${item}${index}`" :value="item">{{ item }}</el-option>-->
+<!--            </el-select>-->
+            <el-input placeholder="filter" v-model="columnSelect['Seq-type']" clearable  @input="headerChange(columnSelect['Seq-type'], 'Seq-type')"></el-input>
           </template>
         </el-table-column>
       </el-table-column>
       <el-table-column prop="Year" label="Year" sortable>
         <el-table-column prop="Year" width="100">
           <template #header>
-            <el-select placeholder="filter" v-model="columnSelect['Year']" @change="(value) => headerChange(value, 'Year')">
-              <el-option value="">All </el-option>
-              <el-option v-for="(item, index) in selectKeyArray['Year']" :key="`${item}${index}`" :value="item">{{ item }}</el-option>
-            </el-select>
+<!--            <el-select placeholder="filter" v-model="columnSelect['Year']" @change="(value) => headerChange(value, 'Year')">-->
+<!--              <el-option value="">All </el-option>-->
+<!--              <el-option v-for="(item, index) in selectKeyArray['Year']" :key="`${item}${index}`" :value="item">{{ item }}</el-option>-->
+<!--            </el-select>-->
+            <el-input placeholder="filter" v-model="columnSelect['Year']" clearable  @input="headerChange(columnSelect['Year'], 'Year')"></el-input>
           </template>
         </el-table-column>
       </el-table-column>
       <el-table-column prop="Accession" label="Accession" sortable>
         <el-table-column prop="Accession">
           <template #header>
-            <el-select placeholder="filter" v-model="columnSelect['Accession']" @change="(value) => headerChange(value, 'Accession')">
-              <el-option value="">All </el-option>
-              <el-option v-for="(item, index) in selectKeyArray['Accession']" :key="`${item}${index}`" :value="item">{{ item }}</el-option>
-            </el-select>
+<!--            <el-select placeholder="filter" v-model="columnSelect['Accession']" @change="(value) => headerChange(value, 'Accession')">-->
+<!--              <el-option value="">All </el-option>-->
+<!--              <el-option v-for="(item, index) in selectKeyArray['Accession']" :key="`${item}${index}`" :value="item">{{ item }}</el-option>-->
+<!--            </el-select>-->
+            <el-input placeholder="filter" v-model="columnSelect['Accession']" clearable  @input="headerChange(columnSelect['Accession'], 'Accession')"></el-input>
           </template>
         </el-table-column>
       </el-table-column>
@@ -113,9 +121,11 @@
       <el-table-column v-for="column in columnList" :key="column" :prop="column" :label="column" :sortable="column!=='Link'">
         <el-table-column :prop="column" v-if="column!=='Link'">
           <template #header>
-            <el-select placeholder="filter" v-model="columnSelect['Species']" @change="(value) => headerChange(value, 'Species')" clearable>
-              <el-option value="">All </el-option>
-            </el-select>
+
+<!--            <el-select placeholder="filter" v-model="columnSelect['Species']" @change="(value) => headerChange(value, 'Species')" clearable>-->
+<!--              <el-option value="">All </el-option>-->
+<!--            </el-select>-->
+            <el-input placeholder="filter" v-model="columnSelect[column]"  @input="headerChange(columnSelect[column], column)"></el-input>
           </template>
         </el-table-column>
       </el-table-column>
@@ -146,7 +156,8 @@ export default {
       },
       selectKeyArray: {},
       columnList: ['Species', 'Atlas', 'Tissue', 'Status', 'Platform', 'Seq-type', 'Year', 'Accession', 'Link'],
-      loading: true
+      loading: true,
+      columnFilters:{}
     }
   },
   computed: {
@@ -234,21 +245,48 @@ export default {
       }
     },
     headerChange(value, objName) {
-      const selectMap = Object.keys(this.columnSelect).filter((key) => {
-        return this.columnSelect[key] != ""
-      })
-      let tableData = []
+      // const selectMap = Object.keys(this.columnSelect).filter((key) => {
+      //   return this.columnSelect[key] != ""
+      // })
+      // let tableData = []
+      //
+      // selectMap.forEach((key) => {
+      //   tableData = this.frozenData.filter(
+      //     (value) => value[key] === this.columnSelect[key]
+      //   )
+      // })
+      // this.tableData = selectMap.length < 1 ? this.frozenData : tableData
+      // this.$nextTick(() => {
+      //   this.$set(this.columnSelect, objName, value)
+      //   this.$forceUpdate()
+      // })
+      // 将输入的值转换为小写，方便不区分大小写进行比较
+      const lowercasedValue = value.toLowerCase();
 
-      selectMap.forEach((key) => {
-        tableData = this.frozenData.filter(
-          (value) => value[key] === this.columnSelect[key]
-        )
-      })
-      this.tableData = selectMap.length < 1 ? this.frozenData : tableData
-      this.$nextTick(() => {
-        this.$set(this.columnSelect, objName, value)
-        this.$forceUpdate()
-      })
+      // 如果当前列的筛选条件为空，则将其初始化为一个空数组
+      if (!this.columnFilters[objName]) {
+        this.columnFilters[objName] = [];
+      }
+
+      // 更新当前列的筛选条件数组
+      this.columnFilters[objName] = lowercasedValue ? [lowercasedValue] : [];
+
+      // 使用过滤函数筛选数据
+      const filteredData = this.frozenData.filter((item) => {
+        // 对于每一行数据，检查所有列的筛选条件是否都满足
+        return Object.keys(this.columnFilters).every((key) => {
+          // 如果当前列的筛选条件数组不为空，则检查当前行的值是否满足条件
+          if (this.columnFilters[key].length > 0) {
+            const columnValue = String(item[key]).toLowerCase();
+            return this.columnFilters[key].some((filter) => columnValue.includes(filter));
+          }
+          // 如果当前列的筛选条件数组为空，则说明不需要对当前列进行筛选，直接返回true
+          return true;
+        });
+      });
+      // 将筛选后的数据赋值给表格数据，实现数据的更新
+      this.tableData = filteredData;
+
       this.searchKey = ''
     },
     // search事件，回车时触发,搜索全局数据
