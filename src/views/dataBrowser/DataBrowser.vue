@@ -29,7 +29,7 @@
             >
             </el-option>
           </el-select>
-          <div class="left-scatter" v-loading="plotLoading">
+          <div class="left-scatter" v-loading="plotLoadingL">
             <div ref="scatterChartRefLeft" id="scatterChartRefLeft"></div>
           </div>
         </div>
@@ -56,7 +56,7 @@
             >
             </el-option>
           </el-select>
-          <div class="right-scatter" v-loading="plotLoading">
+          <div class="right-scatter" v-loading="plotLoadingR">
 
             <div ref="scatterChartRefRight" id="scatterChartRefRight"></div>
           </div>
@@ -96,7 +96,8 @@ export default {
       sliceGeneOptions:[],
       loading: false,
       noMore: false,
-      plotLoading:true
+      plotLoadingL:true,
+      plotLoadingR:true
     };
   },
   watch:{
@@ -106,7 +107,13 @@ export default {
         if(region){
           this.datasetParams['region'] = region
           this.datasetParams['atlas'] = atlas
+          if (this.datasetParams.atlas === 'Mouse') {
+            this.geneFeatures = 'Malat1'
+          } else {
+            this.geneFeatures = 'GFAP'
+          }
           this.getLoadData(this.datasetParams,this.colorBy,this.geneFeatures)
+          this.$set(this, "colorByOptions", color_keys[this.datasetParams['atlas']])
         }
       },
       immediate:true,
@@ -151,10 +158,12 @@ export default {
       }
     },
     async switchUmapGene(geneVal) {
+      this.plotLoadingR = true
       this.chartInfo.selectedGeneGroupIndex = -1
       await this.getLoadData(this.datasetParams, this.colorBy, geneVal)
     },
     async switchUmapType(chartType) {
+      this.plotLoadingL = true
       this.chartInfo.selectedGroupIndex = -1
       await this.getLoadData(this.datasetParams, chartType)
     },
@@ -166,7 +175,8 @@ export default {
         this.geneFeatures = 'GFAP'
       }
       this.$set(this, "colorByOptions", color_keys[params['atlas']])
-      this.plotLoading = true
+      this.plotLoadingL = true
+      this.plotLoadingR = true
       this.getLoadData(params, this.colorBy, this.geneFeatures)
     },
     async getLoadData(params, chartType, geneVal) {
@@ -195,7 +205,8 @@ export default {
       let geneJsonData = geneRes.data// 提取默认导出的基因 JSON 数据
       this.sliceGeneOptions = geneJsonData.slice(0, 20)
       this.$set(this, "geneOptions", geneJsonData)
-      this.plotLoading = false
+      this.plotLoadingL = false
+      this.plotLoadingR = false
     },
     async selectUmapGene(geneVal, xyJsonData, chartType, expsDataArr) {
       const geneUmapData = this.dealUmapData(xyJsonData, "cell_type", expsDataArr)
