@@ -68,7 +68,7 @@
 <!--                <el-select placeholder="filter" v-model="columnSelect['Species']" @change="(value) => headerChange(value, 'Species')" clearable>-->
 <!--                  <el-option value="">All </el-option>-->
 <!--                </el-select>-->
-                <el-input v-model="columnSelect[column]"  @input="headerChange(columnSelect[column], column)"></el-input>
+                <el-input placeholder="filter" v-model="columnSelect[column]"  @input="headerChange(columnSelect[column], column)"></el-input>
               </template>
             </el-table-column>
           </el-table-column>
@@ -82,7 +82,7 @@
 <!--                  <el-option v-for="(item, index) in selectKeyArray['C0']" :key="`C0${item}${index}`" :value="item">{{ item }}</el-option>-->
 <!--                </el-select>-->
 
-                <el-input v-model="columnSelect['C0']" clearable  @input="headerChange(columnSelect['C0'], 'C0')"></el-input>
+                <el-input placeholder="filter" v-model="columnSelect['C0']" clearable  @input="headerChange(columnSelect['C0'], 'C0')"></el-input>
               </template>
               <template slot-scope="scope">
                 {{ scope.row["C0"] || "-" }}
@@ -97,7 +97,7 @@
 <!--                  <el-option v-for="(item, index) in selectKeyArray['avg_log2FC']" :key="`avg_log2FC${item}${index}`" :value="item">{{ item }}</el-option>-->
 <!--                </el-select>-->
 
-                <el-input v-model="columnSelect['avg_log2FC']" clearable  @input="headerChange(columnSelect['avg_log2FC'], 'avg_log2FC')"></el-input>
+                <el-input placeholder="filter" v-model="columnSelect['avg_log2FC']" clearable  @input="headerChange(columnSelect['avg_log2FC'], 'avg_log2FC')"></el-input>
               </template>
               <template slot-scope="scope">
                 {{ scope.row["avg_log2FC"] || "-" }}
@@ -112,7 +112,7 @@
 <!--                  <el-option v-for="(item, index) in selectKeyArray['p_val']" :key="`p_val${item}${index}`" :value="item">{{ item }}</el-option>-->
 <!--                </el-select>-->
 
-                <el-input v-model="columnSelect['p_val']" clearable  @input="headerChange(columnSelect['p_val'], 'p_val')"></el-input>
+                <el-input placeholder="filter" v-model="columnSelect['p_val']" clearable  @input="headerChange(columnSelect['p_val'], 'p_val')"></el-input>
               </template>
               <template slot-scope="scope">
                 {{ scope.row["p_val"]  }}
@@ -127,7 +127,7 @@
 <!--                  <el-option v-for="(item, index) in selectKeyArray['p_val_adj']" :key="`p_val_adj${item}${index}`" :value="item">{{ item }}</el-option>-->
 <!--                </el-select>-->
 
-                <el-input v-model="columnSelect['p_val_adj']" clearable  @input="headerChange(columnSelect['p_val_adj'], 'p_val_adj')"></el-input>
+                <el-input placeholder="filter" v-model="columnSelect['p_val_adj']" clearable  @input="headerChange(columnSelect['p_val_adj'], 'p_val_adj')"></el-input>
               </template>
               <template slot-scope="scope">
                 {{ scope.row["p_val_adj"]  }}
@@ -142,7 +142,7 @@
 <!--                  <el-option v-for="(item, index) in selectKeyArray['pct.1']" :key="`pct1${item}${index}`" :value="item">{{ item }}</el-option>-->
 <!--                </el-select>-->
 
-                <el-input v-model="columnSelect['pct.1']" clearable  @input="headerChange(columnSelect['pct.1'], 'pct.1')"></el-input>
+                <el-input placeholder="filter" v-model="columnSelect['pct.1']" clearable  @input="headerChange(columnSelect['pct.1'], 'pct.1')"></el-input>
               </template>
               <template slot-scope="scope">
                 {{ scope.row["pct.1"] || "-" }}
@@ -160,7 +160,7 @@
 <!--                  <el-option v-for="(item, index) in selectKeyArray['pct.2']" :key="`pct2${item}${index}`" :value="item">{{ item }}</el-option>-->
 <!--                </el-select>-->
 
-                <el-input v-model="columnSelect['pct.2']" clearable  @input="headerChange(columnSelect['pct.2'], 'pct.2')"></el-input>
+                <el-input placeholder="filter" v-model="columnSelect['pct.2']" clearable  @input="headerChange(columnSelect['pct.2'], 'pct.2')"></el-input>
               </template>
               <template slot-scope="scope">
                 {{ scope.row["pct.2"] || "-" }}
@@ -201,7 +201,8 @@ export default {
       apiBaseUrl: "https://data.braincellatlas.org",
       columnSelect: { C0: '', avg_log2FC: '', p_val: '', p_val_adj: '', 'pct.1': '', 'pct.2': '' },
       selectKeyArray: {},
-      columnList: ['C0', 'avg_log2FC', 'p_val', 'p_val_adj', 'pct.1', 'pct.2']
+      columnList: ['C0', 'avg_log2FC', 'p_val', 'p_val_adj', 'pct.1', 'pct.2'],
+      columnFilters:{}
     }
   },
   watch: {
@@ -317,22 +318,50 @@ export default {
       }
     },
     headerChange (value, objName) {
-      const selectMap = Object.keys(this.columnSelect).filter((key) => {
-        return this.columnSelect[key] != ""
-      })
-      let tableData = []
+      // const selectMap = Object.keys(this.columnSelect).filter((key) => {
+      //   return this.columnSelect[key] != ""
+      // })
+      // let tableData = []
+      //
+      // selectMap.forEach((key) => {
+      //   tableData = this.frozenData.filter(
+      //     // (value) => value[key] === this.columnSelect[key]
+      //     (value) => String(value[key]).toLowerCase().includes(String(this.columnSelect[key]).toLowerCase())
+      //   )
+      // })
+      // this.tableData = selectMap.length < 1 ? this.frozenData : tableData
+      // this.$nextTick(() => {
+      //   this.$set(this.columnSelect, objName, value)
+      //   this.$forceUpdate()
+      // })
 
-      selectMap.forEach((key) => {
-        tableData = this.frozenData.filter(
-          // (value) => value[key] === this.columnSelect[key]
-          (value) => String(value[key]).toLowerCase().includes(String(this.columnSelect[key]).toLowerCase())
-        )
-      })
-      this.tableData = selectMap.length < 1 ? this.frozenData : tableData
-      this.$nextTick(() => {
-        this.$set(this.columnSelect, objName, value)
-        this.$forceUpdate()
-      })
+      // 将输入的值转换为小写，方便不区分大小写进行比较
+      const lowercasedValue = value.toLowerCase();
+
+      // 如果当前列的筛选条件为空，则将其初始化为一个空数组
+      if (!this.columnFilters[objName]) {
+        this.columnFilters[objName] = [];
+      }
+
+      // 更新当前列的筛选条件数组
+      this.columnFilters[objName] = lowercasedValue ? [lowercasedValue] : [];
+
+      // 使用过滤函数筛选数据
+      const filteredData = this.frozenData.filter((item) => {
+        // 对于每一行数据，检查所有列的筛选条件是否都满足
+        return Object.keys(this.columnFilters).every((key) => {
+          // 如果当前列的筛选条件数组不为空，则检查当前行的值是否满足条件
+          if (this.columnFilters[key].length > 0) {
+            const columnValue = String(item[key]).toLowerCase();
+            return this.columnFilters[key].some((filter) => columnValue.includes(filter));
+          }
+          // 如果当前列的筛选条件数组为空，则说明不需要对当前列进行筛选，直接返回true
+          return true;
+        });
+      });
+      // 将筛选后的数据赋值给表格数据，实现数据的更新
+      this.tableData = filteredData;
+
     }
   }
 }
