@@ -75,7 +75,7 @@ export default {
   data() {
     return {
       // geneFeatures:'A1BG',//存储当前选中的features参数
-      geneFeatures:'MALAT1',//测试gene1:GAPDH 测试gene2:RPS19
+      geneFeatures:'MAP2',//测试gene1:GAPDH 测试gene2:RPS19
       datasetParams:{//存储页面初始默认展示的参数
         "atlas": "Adult",
         "region": "all"
@@ -91,9 +91,9 @@ export default {
     datasetParams:{
       handler(val){
         if(this.datasetParams.atlas==='Mouse'){
-          this.geneFeatures='Malat1'
+          this.geneFeatures='Map2'
         }else{
-          this.geneFeatures='MALAT1'
+          this.geneFeatures='MAP2'
         }
       }
     }
@@ -391,8 +391,7 @@ export default {
       let xyJsonData =res2.data; // 提取默认导出的散点图 JSON 数据
 
       if(geneVal){
-        res2 = await axios.get(`${apiBaseUrl}/json/gene/Fetal/Pons/${geneVal}.json`)
-        console.log(380, `/json/gene/Fetal/Pons/${geneVal}.json`)
+        res2 = await axios.get(`${apiBaseUrl}/json/gene/${params['atlas']}/${params['region']}/${geneVal}.json`)
         //let jsonDataModule2 =  await import(`../../../mock/BCAWebJson/json/gene/Fetal/Pons/${geneVal}.json`);
         //let jsonDataModule2 =  res2.data; // 提取SON 数据
         let jsonData2 = res2.data; // 提取默认导出的 JSON 数据

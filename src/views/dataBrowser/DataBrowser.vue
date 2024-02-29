@@ -86,7 +86,7 @@ export default {
         selectedGeneGroupIndex: -1,//不要改这个key
       },
       colorBy:'cell_type',//存储当前选中的color by的参数
-      geneFeatures:'MALAT1',//存储当前选中的features参数
+      geneFeatures:'MAP2',//存储当前选中的features参数
       colorByOptions:[],
       geneOptions:[],
       datasetParams:{//存储页面初始默认展示的参数
@@ -108,9 +108,9 @@ export default {
           this.datasetParams['region'] = region
           this.datasetParams['atlas'] = atlas
           if (this.datasetParams.atlas === 'Mouse') {
-            this.geneFeatures = 'Malat1'
+            this.geneFeatures = 'Map2'
           } else {
-            this.geneFeatures = 'GFAP'
+            this.geneFeatures = 'MAP2'
           }
           this.colorBy = 'cell_type'
           this.getLoadData(this.datasetParams,this.colorBy,this.geneFeatures)
@@ -171,9 +171,9 @@ export default {
     submitParams(params) {
       this.$set(this, "datasetParams", params)
       if (this.datasetParams.atlas === 'Mouse') {
-        this.geneFeatures = 'Malat1'
+        this.geneFeatures = 'Map2'
       } else {
-        this.geneFeatures = 'GFAP'
+        this.geneFeatures = 'MAP2'
       }
       this.$set(this, "colorByOptions", color_keys[params['atlas']])
       this.plotLoadingL = true
