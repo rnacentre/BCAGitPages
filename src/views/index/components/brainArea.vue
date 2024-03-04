@@ -72,7 +72,7 @@
     <ul class="brain-nav">
       <li class="nav" id="nav_1" @click="linkTo('Brainstem')" @mouseover="update('Brainstem')" :class="activeBrain=='Brainstem' ? 'actived ' : ''">Brainstem</li>
       <li class="nav" id="nav_2" @click="linkTo('Limbic system')" @mouseover="update('Limbic system')" :class="activeBrain=='Limbic system' ? 'actived ' : ''">Limbic system</li>
-      <li class="nav" id="nav_3" @click="linkTo('Cerebral cortex')" @mouseover="update('Cerebral cortex')" :class="activeBrain=='Cerebral cortex' ? 'actived ' : ''">Cerebral cortex</li>
+      <li class="nav" id="nav_3" @click="linkTo('Cerebral cortex ')" @mouseover="update('Cerebral cortex')" :class="activeBrain=='Cerebral cortex' ? 'actived ' : ''">Cerebral cortex</li>
       <li class="nav" id="nav_4" @click="linkTo('Corpus callosum')" @mouseover="update('Corpus callosum')" :class="activeBrain=='Corpus callosum' ? 'actived ' : ''">Corpus callosum</li>
       <li class="nav" id="nav_5" @click="linkTo('Cerebellum')" @mouseover="update('Cerebellum')" :class="activeBrain=='Cerebellum' ? 'actived ' : ''">Cerebellum</li>
       <li class="nav" id="nav_6" @click="linkTo('Spinal cord')" @mouseover="update('Spinal cord')" :class="activeBrain=='Spinal cord' ? 'actived ' : ''">Spinal cord</li>
