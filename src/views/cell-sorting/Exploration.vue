@@ -1,9 +1,7 @@
 <template>
   <div class="custom-body-container">
     <div class="wrap">
-      <HeaderParams
-        @submitParams="submitParams"
-      ></HeaderParams>
+      <HeaderParams @submitParams="submitParams"></HeaderParams>
       <!--    绘制扇形图区域-->
       <div class="canvas-container">
         <div class="params-container">
@@ -25,24 +23,12 @@
         <div class="box-container" style="width:100%;margin-bottom: 10px">
           <div style="margin-bottom: 10px">
             <span class="params-text">Features</span>
-            <el-select
-              ref="geneSelect"
-              :loading="loading"
-              class="select-space"
-              clearable
-              filterable
-              v-model="geneFeatures"
-              placeholder="please select gene"
-              :filter-method="filterValue"
-              @change="switchUmapGene(geneFeatures)"
-            >
+            <el-select ref="geneSelect" :loading="loading" class="select-space" clearable filterable
+              v-model="geneFeatures" placeholder="please select gene" :filter-method="filterValue"
+              @change="switchUmapGene(geneFeatures)">
 
-              <el-option
-                v-for="(item) in sliceGeneOptions"
-                :label="item['label']"
-                :value="item['value']"
-                :key="item['value']"
-              >
+              <el-option v-for="(item) in sliceGeneOptions" :label="item['label']" :value="item['value']"
+                :key="item['value']">
               </el-option>
             </el-select>
           </div>
@@ -64,8 +50,8 @@
 <script>
 import HeaderParams from "@/components/DataViewer/HeaderParams";
 import Plotly from 'plotly.js-dist-min'
-import { celltyleColorData,chartColor } from "../../../mock/chartcolor"
-import { heatmapData,textColor } from "../../../mock/heatmapData";
+import { celltypeColors, chartColor } from "../../../mock/chartcolor"
+import { heatmapData, textColor } from "../../../mock/heatmapData";
 import axios from "axios";
 export default {
   name: "Exploration",
@@ -75,25 +61,25 @@ export default {
   data() {
     return {
       // geneFeatures:'A1BG',//存储当前选中的features参数
-      geneFeatures:'MAP2',//测试gene1:GAPDH 测试gene2:RPS19
-      datasetParams:{//存储页面初始默认展示的参数
+      geneFeatures: 'MAP2',//测试gene1:GAPDH 测试gene2:RPS19
+      datasetParams: {//存储页面初始默认展示的参数
         "atlas": "Adult",
         "region": "all"
       },
-      geneOptions:[],
-      sliceGeneOptions:[],
-      filterOptions:[],
+      geneOptions: [],
+      sliceGeneOptions: [],
+      filterOptions: [],
       loading: false,
       noMore: false,
     }
   },
-  watch:{
-    datasetParams:{
-      handler(val){
-        if(this.datasetParams.atlas==='Mouse'){
-          this.geneFeatures='Map2'
-        }else{
-          this.geneFeatures='MAP2'
+  watch: {
+    datasetParams: {
+      handler(val) {
+        if (this.datasetParams.atlas === 'Mouse') {
+          this.geneFeatures = 'Map2'
+        } else {
+          this.geneFeatures = 'MAP2'
         }
       }
     }
@@ -105,33 +91,33 @@ export default {
           // 这里是用的value选项筛选，默认是label
           return item.value.toLowerCase().indexOf(query.toLowerCase()) > -1;
         });
-        let options = filterOptions.slice(0,20)
-        this.$set(this,"sliceGeneOptions",options)
+        let options = filterOptions.slice(0, 20)
+        this.$set(this, "sliceGeneOptions", options)
       } else {
         this.sliceGeneOptions = [];
       }
     },
-    async loadMore(){
-      if(this.loading) return
+    async loadMore() {
+      if (this.loading) return
       this.loading = true
-      let options = this.geneOptions.slice(this.sliceGeneOptions.length,this.sliceGeneOptions.length + 4)
+      let options = this.geneOptions.slice(this.sliceGeneOptions.length, this.sliceGeneOptions.length + 4)
       this.sliceGeneOptions = this.sliceGeneOptions.concat(options)
-      this.timer = setTimeout(()=>{
+      this.timer = setTimeout(() => {
         this.loading = false
-      },500)
+      }, 500)
 
-      if(this.geneOptions.length === this.sliceGeneOptions.length){
-        this.$refs.geneSelect.$refs.scrollbar.$refs.wrap.removeEventListener('scroll',this.scolling())
+      if (this.geneOptions.length === this.sliceGeneOptions.length) {
+        this.$refs.geneSelect.$refs.scrollbar.$refs.wrap.removeEventListener('scroll', this.scolling())
         this.noMore = true
       }
     },
-    scolling(){
+    scolling() {
       let e = this.$refs.geneSelect.$refs.scrollbar.$refs.wrap
-      if(this.noMore) return
+      if (this.noMore) return
       // 到底时触发 loadMore
-      let loadMore = e.scrollHeight -  e.scrollTop -5 < e.clientHeight
+      let loadMore = e.scrollHeight - e.scrollTop - 5 < e.clientHeight
 
-      if(loadMore){
+      if (loadMore) {
         this.loadMore()
       }
     },
@@ -139,19 +125,19 @@ export default {
     drawHeatMapData(heatmapData, textColor) {
       let allLayout = {
         title: 'human & mouse',
-        margin:{
-          l:130, //解决Y轴显示的值超出
-          b:115,
+        margin: {
+          l: 130, //解决Y轴显示的值超出
+          b: 115,
         },
-        xaxis:{
+        xaxis: {
           tickmode: "array",
-          tickangle:-60,
-          zeroline:false,//不显示纵坐标轴
-          autotick:false, //是否绘制刻度线标签
+          tickangle: -60,
+          zeroline: false,//不显示纵坐标轴
+          autotick: false, //是否绘制刻度线标签
         },
       }
       //设置图片导出的参数
-      let  config = {
+      let config = {
         toImageButtonOptions: {
           format: 'svg', // 设置图片导出格式
           filename: 'image',//设置导出命名
@@ -161,11 +147,11 @@ export default {
       let layout = _.cloneDeep(allLayout)
       layout["xaxis"]["ticktext"] = textColor
       layout["xaxis"]["tickvals"] = heatmapData[0]["x"]
-      Plotly.newPlot(this.$refs.heatmapChartRef, heatmapData,layout,config);
+      Plotly.newPlot(this.$refs.heatmapChartRef, heatmapData, layout, config);
 
     },
     //将数据按照celltype分组基因表达量
-    async groupCellType(cellTypeData,expsData){
+    async groupCellType(cellTypeData, expsData) {
       let groupedData = expsData.reduce((result, value, index) => {
         let type = cellTypeData[index];
 
@@ -182,25 +168,25 @@ export default {
       //绘制箱线图
       await this.getGeneBoxplot(groupedData)
     },
-    async getGeneBoxplot(jsonData){
+    async getGeneBoxplot(jsonData) {
       const elementsBox = document.getElementsByClassName('box-chart');
       let data = [] //存储箱线图的数据
       for (const groupedDataKey in jsonData) {
         data.push({
           'type': 'box',
-          'name':groupedDataKey,
-          'y':jsonData[groupedDataKey]
+          'name': groupedDataKey,
+          'y': jsonData[groupedDataKey]
         })
       }
       const layout = {
         height: 400,//和绘图外面的盒子高度保持一致
         margin: {
-          t:30,
+          t: 30,
           b: 140,
         },
-        autosize:true
+        autosize: true
       };
-      Plotly.newPlot('boxChartContainer', data,layout);
+      Plotly.newPlot('boxChartContainer', data, layout);
       window.addEventListener('resize', () => {
         // 获取新的窗口大小
         const newWidth = elementsBox[0].offsetWidth;
@@ -213,12 +199,12 @@ export default {
         });
       });
     },
-    async switchUmapGene(geneVal){
-      await this.getLoadData(this.datasetParams,geneVal)
+    async switchUmapGene(geneVal) {
+      await this.getLoadData(this.datasetParams, geneVal)
     },
     async submitParams(params) {
-      this.$set(this,"datasetParams",params) //更新dataset的参数
-      await this.getLoadData(params,this.geneFeatures)
+      this.$set(this, "datasetParams", params) //更新dataset的参数
+      await this.getLoadData(params, this.geneFeatures)
     },
 
     /**
@@ -226,45 +212,45 @@ export default {
      * @param pieChartData
      * @param speciesCountValues
      */
-    drawPieAndBarChart(pieChartData,speciesCountValues){
+    drawPieAndBarChart(pieChartData, speciesCountValues) {
       const elementsLeft = document.getElementsByClassName('left-scatter');
       const elementsRight = document.getElementsByClassName('right-scatter');
       //设置图片导出的参数
-      let  config = {
+      let config = {
         toImageButtonOptions: {
           format: 'svg', // 设置图片导出格式
           filename: 'image',//设置导出命名
           scale: 1 // 导出图片放大比例 1为不缩放
-        }
+        },
       };
       //饼图样式配置参数
       let pieLayout = {
         width: elementsLeft[0].offsetWidth,  // 初始宽度
         height: elementsLeft[0].offsetHeight,  // 初始高度
-        margin:{
-          t:80, //调整图之间的间距
-          b:100
+        margin: {
+          t: 80, //调整图之间的间距
+          b: 100
         },
         title: {
-          text:`${this.datasetParams['atlas']} ${this.datasetParams['region']}`,
-          font:{
-            size:16,
+          text: `${this.datasetParams['atlas']} ${this.datasetParams['region']}`,
+          font: {
+            size: 16,
           },
-          position:'top center'
+          position: 'top center'
         },
         // grid: {rows:1, columns:1},
-        uniformtext:{  //设置比较小的占比数不显示
-          minsize:10,
-          mode:'hide',
+        uniformtext: {  //设置比较小的占比数不显示
+          minsize: 10,
+          mode: 'hide',
         },
-        legend:{
-          traceorder:'reversed',
-          itemclick:false,//控制图例点击效果
-          itemdoubleclick:false,//控制双击图例效果
-          x:1,//调整图例的位置
-          y:1,
-          font:{
-            size:10,  //设置图例字的大小
+        legend: {
+          traceorder: 'normal',
+          itemclick: 'toggle',//控制图例点击效果
+          itemdoubleclick: false,//控制双击图例效果
+          x: 1,//调整图例的位置
+          y: 1,
+          font: {
+            size: 10,  //设置图例字的大小
           },
         }
       };
@@ -272,38 +258,38 @@ export default {
       let barLayout = {
         width: elementsRight[0].offsetWidth,  // 初始宽度
         height: elementsRight[0].offsetHeight,  // 初始高度
-        legend:{
-          itemclick:false,//控制图例点击效果
-          itemdoubleclick:false,//控制双击图例效果
+        legend: {
+          itemclick: false,//控制图例点击效果
+          itemdoubleclick: false,//控制双击图例效果
         },
         xaxis: {
-          title:'celltype',//设置坐标提示字的内容
-          titlefont:{
-            size:20, //设置坐标提示字的大小
+          title: 'celltype',//设置坐标提示字的内容
+          titlefont: {
+            size: 20, //设置坐标提示字的大小
           },
-          tickfont:{  //设置刻度字的大小
-            size:10,
+          tickfont: {  //设置刻度字的大小
+            size: 10,
           },
           tickangle: 30
         },
         yaxis: {
           title: 'cell number',
-          titlefont:{
-            size:20,
+          titlefont: {
+            size: 20,
           },
-          tickfont:{
-            size:10,
+          tickfont: {
+            size: 10,
           }
         },
         barmode: 'stack',//堆叠类型
         margin: {
           t: 30, //调整图的间距
-          b:150
+          b: 150
         },
       };
       // 画图
-      Plotly.newPlot(this.$refs.pieChartContainer,pieChartData ,pieLayout,config);
-      Plotly.newPlot(this.$refs.barChartContainer, speciesCountValues, barLayout,config);
+      Plotly.newPlot(this.$refs.pieChartContainer, pieChartData, pieLayout, config);
+      Plotly.newPlot(this.$refs.barChartContainer, speciesCountValues, barLayout, config);
       window.addEventListener('resize', () => {
         // 获取新的窗口大小
         const newWidth = elementsLeft[0].offsetWidth;
@@ -327,7 +313,7 @@ export default {
         });
       });
     },
-    async dealChartData(jsonData){
+    async dealChartData(jsonData) {
       let humanCountData = [] //human的count
       let nameValueArr = [] //存储图例的内容
       let humanTrace  //存储Human堆叠图的数据
@@ -343,41 +329,41 @@ export default {
           x: nameValueArr,
           y: humanCountData,
           // name: 'human',
-          name:`${this.datasetParams['atlas']}_${this.datasetParams['region']}`,
+          name: `${this.datasetParams['atlas']}_${this.datasetParams['region']}`,
           type: 'bar',
           // orientation:'h',
-          width:0.6,
+          width: 0.6,
           marker: {   //控制人类色柱的颜色
             // color: '#62A3CB',
-            color:chartColor
+            color: nameValueArr.map(cellType => celltypeColors[cellType] || chartColor) // 匹配颜色，没有的使用默认颜色
           }
         }
       }
       speciesCountValues.push(humanTrace)
-      let pieChartColors = [chartColor,[]]; //存储饼图对应的颜色数据
+      let pieChartColors = [chartColor, []]; //存储饼图对应的颜色数据
       // 组合饼图数据
       pieChartData = [
         {
           values: humanCountData,  //human数据
           labels: nameValueArr,
           type: 'pie',
-          insidetextorientation:'radial',
+          insidetextorientation: 'radial',
           textposition: "inside",
           marker: {
-            colors:pieChartColors[0]
+            colors: nameValueArr.map(cellType => celltypeColors[cellType] || chartColor) // 匹配颜色，没有的使用默认颜色
           },
           domain: {
             row: 0,
             column: 0
           },
           hoverinfo: 'label+percent',
-          textinfo:'percent',
+          textinfo: 'percent',
         }]
 
-      await this.drawPieAndBarChart(pieChartData,speciesCountValues) //绘制扇形图
+      await this.drawPieAndBarChart(pieChartData, speciesCountValues) //绘制扇形图
     },
     //动态获取json数据
-    async getLoadData(params,geneVal) {
+    async getLoadData(params, geneVal) {
       const res1 = await axios.get(`${apiBaseUrl}/json/pie/${params['atlas']}_${params['region']}.json`)
       console.log(366, `/json/pie/${params['atlas']}_${params['region']}.json`)
       let jsonData = res1.data; // 提取默认导出的 JSON 数据
@@ -388,19 +374,19 @@ export default {
       console.log(373, `/json/${params['atlas']}_${params['region']}_umap.json`)
       //let jsonDataModule2 = await import(`../../../mock/BCAWebJson/json/${params['atlas']}_${params['region'].trim()}_umap.json`);
       //let jsonDataModule2 = res2.data; // 提取SON 数据
-      let xyJsonData =res2.data; // 提取默认导出的散点图 JSON 数据
+      let xyJsonData = res2.data; // 提取默认导出的散点图 JSON 数据
 
-      if(geneVal){
+      if (geneVal) {
         res2 = await axios.get(`${apiBaseUrl}/json/gene/${params['atlas']}/${params['region']}/${geneVal}.json`)
         //let jsonDataModule2 =  await import(`../../../mock/BCAWebJson/json/gene/Fetal/Pons/${geneVal}.json`);
         //let jsonDataModule2 =  res2.data; // 提取SON 数据
         let jsonData2 = res2.data; // 提取默认导出的 JSON 数据
         let cellType = []
-        for (let i = 0; i <xyJsonData.length ; i++) {
+        for (let i = 0; i < xyJsonData.length; i++) {
           cellType.push(xyJsonData[i]['cell_type'])
         }
         let expData = jsonData2.exps.split(',')
-        await this.groupCellType(cellType,expData)
+        await this.groupCellType(cellType, expData)
 
       }
 
@@ -410,22 +396,22 @@ export default {
       //let jsonDataModule3 = await import(`../../../mock/BCAWebJson/json/geneIndex/${params['atlas']}.json`);
       //let jsonDataModule3 = res3.data; // 提取SON 数据
       let geneJsonData = res3.data// 提取默认导出的基因 JSON 数据
-      this.sliceGeneOptions = geneJsonData.slice(0,20)
-      this.$set(this,"geneOptions",geneJsonData)
+      this.sliceGeneOptions = geneJsonData.slice(0, 20)
+      this.$set(this, "geneOptions", geneJsonData)
     },
   },
-  async mounted(){
+  async mounted() {
     // this.drawHeatMapData(heatmapData,textColor)
-    await this.getLoadData(this.datasetParams,this.geneFeatures)
+    await this.getLoadData(this.datasetParams, this.geneFeatures)
 
-    this.$refs.geneSelect.$refs.scrollbar.$refs.wrap.addEventListener('scroll',this.scolling)
+    this.$refs.geneSelect.$refs.scrollbar.$refs.wrap.addEventListener('scroll', this.scolling)
 
   }
 }
 </script>
 
 <style scoped>
-.canvas-container{
+.canvas-container {
   margin-top: 15px;
   border-radius: 20px;
   padding: 5px;
@@ -433,25 +419,33 @@ export default {
   justify-content: space-around;
   background-color: white;
 }
-.canvas-container .params-container{
+
+.canvas-container .params-container {
   width: 49%
 }
-.canvas-container .left-scatter,.right-scatter{
-  width:100%;
-}
-.box-chart{
-  width:100%;
-}
-.heat-map-container{
+
+.canvas-container .left-scatter,
+.right-scatter {
   width: 100%;
 }
-.canvas-h{
-  height:600px;
+
+.box-chart {
+  width: 100%;
 }
-.box-canvas-h{
-  height:400px;
+
+.heat-map-container {
+  width: 100%;
 }
-.last-container{
+
+.canvas-h {
+  height: 600px;
+}
+
+.box-canvas-h {
+  height: 400px;
+}
+
+.last-container {
   margin-bottom: 15px
 }
 </style>
