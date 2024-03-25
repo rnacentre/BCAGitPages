@@ -151,7 +151,7 @@ export default {
 
     },
     //将数据按照celltype分组基因表达量
-    async groupCellType(cellTypeData, expsData) {
+    async groupCellType(cellTypeData, expsData, cellorder) {
       let groupedData = expsData.reduce((result, value, index) => {
         let type = cellTypeData[index];
 
@@ -166,16 +166,25 @@ export default {
         return result;
       }, {});
       //绘制箱线图
-      await this.getGeneBoxplot(groupedData)
+      await this.getGeneBoxplot(groupedData, cellorder)
     },
-    async getGeneBoxplot(jsonData) {
+    async getGeneBoxplot(jsonData, cellorder) {
       const elementsBox = document.getElementsByClassName('box-chart');
       let data = [] //存储箱线图的数据
-      for (const groupedDataKey in jsonData) {
+      // 存储颜色的 key 顺序
+      let colorKeyOrder = Object.keys(celltypeColors);
+      // 自定义排序规则，按对象的id排序
+      var sortedObjKeys = Object.keys(jsonData).sort((a, b) => {
+        return colorKeyOrder.indexOf(a) - colorKeyOrder.indexOf(b);
+      });
+      for (const groupedDataKey of sortedObjKeys) {
         data.push({
           'type': 'box',
           'name': groupedDataKey,
-          'y': jsonData[groupedDataKey]
+          'y': jsonData[groupedDataKey],
+          'marker': {
+            'color': celltypeColors[groupedDataKey] || chartColor[colorKeyOrder.indexOf(groupedDataKey) % chartColor.length] // 根据顺序选择默认颜色 // 指定箱的颜色，如果颜色字典中不存在该细胞类型，则使用默认颜色
+          }
         })
       }
       const layout = {
@@ -204,6 +213,11 @@ export default {
     },
     async submitParams(params) {
       this.$set(this, "datasetParams", params) //更新dataset的参数
+      if (this.datasetParams.atlas === "Mouse") {
+        this.geneFeatures = "Map2";
+      } else {
+        this.geneFeatures = "MAP2";
+      }
       await this.getLoadData(params, this.geneFeatures)
     },
 
@@ -221,7 +235,7 @@ export default {
           format: 'svg', // 设置图片导出格式
           filename: 'image',//设置导出命名
           scale: 1 // 导出图片放大比例 1为不缩放
-        },
+        }
       };
       //饼图样式配置参数
       let pieLayout = {
@@ -245,7 +259,7 @@ export default {
         },
         legend: {
           traceorder: 'normal',
-          itemclick: 'toggle',//控制图例点击效果
+          itemclick: false,//控制图例点击效果
           itemdoubleclick: false,//控制双击图例效果
           x: 1,//调整图例的位置
           y: 1,
@@ -319,26 +333,28 @@ export default {
       let humanTrace  //存储Human堆叠图的数据
       let speciesCountValues = [] //存储分物种堆叠图所有的数据
       let pieChartData //存储饼图的数据
+      // 获取默认颜色中的不重复颜色
+      const defaultColors = chartColor.filter(color => !Object.values(celltypeColors).includes(color));
       for (let i = 0; i < jsonData.length; i++) {
         humanCountData.push(jsonData[i].count)
         nameValueArr.push(jsonData[i].cell_type)
       }
-      for (let i = 0; i < nameValueArr.length; i++) {
-        //组合堆叠图数据  cluster为x轴   每个柱子为去1个cluster,堆叠不同cluster的species的count数
-        humanTrace = {
-          x: nameValueArr,
-          y: humanCountData,
-          // name: 'human',
-          name: `${this.datasetParams['atlas']}_${this.datasetParams['region']}`,
-          type: 'bar',
-          // orientation:'h',
-          width: 0.6,
-          marker: {   //控制人类色柱的颜色
-            // color: '#62A3CB',
-            color: nameValueArr.map(cellType => celltypeColors[cellType] || chartColor) // 匹配颜色，没有的使用默认颜色
-          }
+      // for (let i = 0; i < nameValueArr.length; i++) {
+      //   //组合堆叠图数据  cluster为x轴   每个柱子为去1个cluster,堆叠不同cluster的species的count数
+      humanTrace = {
+        x: nameValueArr,
+        y: humanCountData,
+        // name: 'human',
+        name: `${this.datasetParams['atlas']}_${this.datasetParams['region']}`,
+        type: 'bar',
+        // orientation:'h',
+        width: 0.6,
+        marker: {   //控制人类色柱的颜色
+          // color: '#62A3CB',
+          color: nameValueArr.map(cellType => celltypeColors[cellType] || defaultColors.shift()) // 匹配颜色，没有的使用默认颜色
         }
       }
+      // }
       speciesCountValues.push(humanTrace)
       let pieChartColors = [chartColor, []]; //存储饼图对应的颜色数据
       // 组合饼图数据
@@ -350,7 +366,7 @@ export default {
           insidetextorientation: 'radial',
           textposition: "inside",
           marker: {
-            colors: nameValueArr.map(cellType => celltypeColors[cellType] || chartColor) // 匹配颜色，没有的使用默认颜色
+            colors: humanTrace.marker.color // 与bar用一样的颜色
           },
           domain: {
             row: 0,
@@ -359,15 +375,15 @@ export default {
           hoverinfo: 'label+percent',
           textinfo: 'percent',
         }]
-
       await this.drawPieAndBarChart(pieChartData, speciesCountValues) //绘制扇形图
+      return nameValueArr;
     },
     //动态获取json数据
     async getLoadData(params, geneVal) {
       const res1 = await axios.get(`${apiBaseUrl}/json/pie/${params['atlas']}_${params['region']}.json`)
       console.log(366, `/json/pie/${params['atlas']}_${params['region']}.json`)
       let jsonData = res1.data; // 提取默认导出的 JSON 数据
-      await this.dealChartData(jsonData)
+      const cellorder = await this.dealChartData(jsonData)
 
       //组合箱线图数据
       let res2 = await axios.get(`${apiBaseUrl}/json/${params['atlas']}_${params['region']}_umap.json`)
@@ -386,7 +402,7 @@ export default {
           cellType.push(xyJsonData[i]['cell_type'])
         }
         let expData = jsonData2.exps.split(',')
-        await this.groupCellType(cellType, expData)
+        await this.groupCellType(cellType, expData, cellorder)
 
       }
 
