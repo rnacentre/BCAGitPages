@@ -398,7 +398,7 @@ export default {
           x: chartData[info][0],
           y: chartData[info][1],
           mode: "markers",
-          type: "scatter",
+          type: "scattergl",//使用scattergl加速
           name: info,
           //设置鼠标悬浮到点上的信息
           hovertemplate: chartData[info][0].map((item, index) => {
