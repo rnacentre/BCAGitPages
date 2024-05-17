@@ -112,8 +112,7 @@
       </el-table-column>
       <el-table-column prop="Download" label="Download" width="170">
         <template slot-scope="scope">
-          <span class="link" @click="toLink()" title="Raw">Raw</span>&nbsp;&nbsp;
-          <span class="link" @click="toLink()" title="Processed Data">Processed Data</span>
+          <span class="link" @click="toLink(scope.row&&scope.row.Download)" :title="scope.row&&scope.row.Download">Raw&Processed Data</span>
         </template>
       </el-table-column>
     </el-table>
@@ -152,10 +151,11 @@ export default {
         'Seq-type': '',
         Year: '',
         Accession: '',
-        Link: ''
+        Link: '',
+        Download: ''
       },
       selectKeyArray: {},
-      columnList: ['Species', 'Atlas', 'Tissue', 'Status', 'Platform', 'Seq-type', 'Year', 'Accession', 'Link'],
+      columnList: ['Species', 'Atlas', 'Tissue', 'Status', 'Platform', 'Seq-type', 'Year', 'Accession', 'Link', 'share'],
       loading: true,
       columnFilters:{}
     }
@@ -185,7 +185,8 @@ export default {
                   'Seq-type': jsonData[i]['Seq-type'],
                   Year: jsonData[i]['Year'],
                   Accession: jsonData[i]['Accession'],
-                  Link: jsonData[i]['Link']
+                  Link: jsonData[i]['Link'],
+                  Download: jsonData[i]['share']
                 })
               }
               this.frozenData = this._.cloneDeep(this.tableData)
@@ -228,7 +229,8 @@ export default {
             'Seq-type': result["Seq-type"][i],
             Year: result["Year"][i],
             Accession: result["Accession"][i],
-            Link: result["Link"][i]
+            Link: result["Link"][i],
+            Download: result["share"][i]
           })
         })
         const keys = Object.keys(result)
