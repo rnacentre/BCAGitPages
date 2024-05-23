@@ -67,7 +67,7 @@ export default {
           num: 9,
           content: "Diseases",
           icon: "img/brain/stats-icon-diseases.png",
-          uri: '/dataSets'
+          uri: '/dataSet'
         },
       ],
     };

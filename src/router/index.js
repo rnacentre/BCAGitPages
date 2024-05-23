@@ -232,6 +232,7 @@ export const routes = [
 
 const router = new VueRouter({
   routes,
+  mode: 'history',
   scrollBehavior: () => ({
     y: 0,
   }),
